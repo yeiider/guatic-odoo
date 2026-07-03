@@ -13,6 +13,12 @@ services:
       - "8072"
     volumes:
       - odoo-data:/var/lib/odoo
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME:-postgres}
+      DB_PORT: ${DB_PORT:-5432}
 
 volumes:
   odoo-data:

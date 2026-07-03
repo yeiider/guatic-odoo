@@ -10,11 +10,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY prod/requirements.txt /tmp/requirements.txt
 RUN pip3 install -r /tmp/requirements.txt --break-system-packages
 
-# Copiar configuración de Odoo (evita bind-mount en Coolify)
+# Copiar configuración de Odoo
 COPY odoo.prod.conf /etc/odoo/odoo.conf
 
-# Copiar addons custom directamente al contenedor
+# Copiar addons custom
 COPY addons /mnt/extra-addons
+
+# Copiar entrypoint personalizado que mapea variables
+COPY prod/entrypoint.sh /opt/entrypoint.sh
+RUN chmod +x /opt/entrypoint.sh
+
+ENTRYPOINT ["/opt/entrypoint.sh"]
 
 EXPOSE 8069 8072 8071
 
