@@ -2,21 +2,42 @@
 set -e
 
 # =============================================================================
-# Mapeo DB_HOST/DB_USER/DB_PASSWORD/DB_PORT/DB_NAME → HOST/USER/PASSWORD/PORT/DB_NAME
-# para que el entrypoint original de Odoo los use (vía : ${HOST:=...})
-#
-# NOTA: NO exportamos PORT desde DB_PORT porque Coolify usa PORT para
-# detectar el puerto del contenedor. El entrypoint original de Odoo
-# por defecto usa PORT=5432 (si no está definido).
+# Entrypoint personalizado para Odoo en Coolify
+# =============================================================================
+# Pasa los parámetros de BD directamente a Odoo como CLI args,
+# evitando el entrypoint original que tiene conflictos con PORT=8069
+# y otras variables de Coolify.
 # =============================================================================
 
-[ -n "$DB_HOST" ] && export HOST="$DB_HOST"
-[ -n "$DB_USER" ] && export USER="$DB_USER"
-[ -n "$DB_PASSWORD" ] && export PASSWORD="$DB_PASSWORD"
-[ -n "$DB_NAME" ] && export DB_NAME="$DB_NAME"
+ODOO_RC="${ODOO_RC:-/etc/odoo/odoo.conf}"
 
-# PORT no se exporta — el entrypoint original defaultea a 5432
-# Si necesitas un DB_PORT distinto, agrégalo en el config file
+# Construir argumentos de base de datos
+DB_ARGS=()
 
-# Ejecutar el entrypoint original de Odoo
-exec /entrypoint.sh "$@"
+if [ -n "$DB_HOST" ]; then
+    DB_ARGS+=("--db_host=$DB_HOST")
+fi
+
+if [ -n "$DB_PORT" ]; then
+    DB_ARGS+=("--db_port=$DB_PORT")
+fi
+
+if [ -n "$DB_USER" ]; then
+    DB_ARGS+=("--db_user=$DB_USER")
+fi
+
+if [ -n "$DB_PASSWORD" ]; then
+    DB_ARGS+=("--db_password=$DB_PASSWORD")
+fi
+
+if [ -n "$DB_NAME" ]; then
+    DB_ARGS+=("--database=$DB_NAME")
+fi
+
+# Esperar a que PostgreSQL esté disponible
+if command -v wait-for-psql.py &> /dev/null; then
+    wait-for-psql.py "${DB_ARGS[@]}" --timeout=30
+fi
+
+# Ejecutar Odoo directamente con los argumentos de BD
+exec odoo --config="$ODOO_RC" "${DB_ARGS[@]}" "$@"
