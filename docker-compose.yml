@@ -1,8 +1,8 @@
 services:
   odoo:
     build:
-      context: ./prod
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: prod/Dockerfile
       args:
         ODOO_VERSION: "18"
     image: guatic-odoo:latest
@@ -13,8 +13,6 @@ services:
       - "8072"
     volumes:
       - odoo-data:/var/lib/odoo
-      - ./odoo.prod.conf:/etc/odoo/odoo.conf:ro
-      - ./addons:/mnt/extra-addons
     environment:
       HOST: ${PGHOST}
       USER: ${PGUSER:-postgres}
