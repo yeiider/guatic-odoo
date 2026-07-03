@@ -13,12 +13,6 @@ services:
       - "8072"
     volumes:
       - odoo-data:/var/lib/odoo
-    environment:
-      HOST: ${PGHOST}
-      USER: ${PGUSER:-postgres}
-      PASSWORD: ${PGPASSWORD}
-      DB: ${PGDATABASE:-postgres}
-      PORT: ${PGPORT:-5432}
 
 volumes:
   odoo-data:
