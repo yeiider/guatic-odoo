@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Copiar e instalar dependencias Python
-COPY requirements.txt /tmp/requirements.txt
+COPY prod/requirements.txt /tmp/requirements.txt
 RUN pip3 install -r /tmp/requirements.txt --break-system-packages
 
 # Copiar configuración de Odoo (evita bind-mount en Coolify)
