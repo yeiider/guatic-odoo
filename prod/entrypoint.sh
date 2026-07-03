@@ -11,33 +11,36 @@ set -e
 
 ODOO_RC="${ODOO_RC:-/etc/odoo/odoo.conf}"
 
-# Construir argumentos de base de datos
-DB_ARGS=()
+# Construir argumentos para wait-for-psql.py (solo conexión, sin --database)
+WAIT_ARGS=()
 
 if [ -n "$DB_HOST" ]; then
-    DB_ARGS+=("--db_host=$DB_HOST")
+    WAIT_ARGS+=("--db_host=$DB_HOST")
 fi
 
 if [ -n "$DB_PORT" ]; then
-    DB_ARGS+=("--db_port=$DB_PORT")
+    WAIT_ARGS+=("--db_port=$DB_PORT")
 fi
 
 if [ -n "$DB_USER" ]; then
-    DB_ARGS+=("--db_user=$DB_USER")
+    WAIT_ARGS+=("--db_user=$DB_USER")
 fi
 
 if [ -n "$DB_PASSWORD" ]; then
-    DB_ARGS+=("--db_password=$DB_PASSWORD")
+    WAIT_ARGS+=("--db_password=$DB_PASSWORD")
 fi
 
+# Construir argumentos para Odoo (incluye --database si existe)
+ODOO_ARGS=("${WAIT_ARGS[@]}")
+
 if [ -n "$DB_NAME" ]; then
-    DB_ARGS+=("--database=$DB_NAME")
+    ODOO_ARGS+=("--database=$DB_NAME")
 fi
 
 # Esperar a que PostgreSQL esté disponible
 if command -v wait-for-psql.py &> /dev/null; then
-    wait-for-psql.py "${DB_ARGS[@]}" --timeout=30
+    wait-for-psql.py "${WAIT_ARGS[@]}" --timeout=30
 fi
 
 # Ejecutar Odoo directamente con los argumentos de BD
-exec odoo --config="$ODOO_RC" "${DB_ARGS[@]}" "$@"
+exec odoo --config="$ODOO_RC" "${ODOO_ARGS[@]}" "$@"
