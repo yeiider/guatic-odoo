@@ -35,16 +35,9 @@ services:
       - comercial-asertis-odoo-data:/var/lib/odoo
       - ../odoo.prod.conf:/etc/odoo/odoo.conf
       - ../addons:/mnt/extra-addons
-    networks:
-      - comercial-asertis-net
-      - proxy-network
 
 volumes:
   comercial-asertis-pg-data:
   comercial-asertis-odoo-data:
 
-networks:
-  comercial-asertis-net:
-    driver: bridge
-  proxy-network:
-    external: true
+
