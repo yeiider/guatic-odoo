@@ -17,8 +17,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      - odoo-network
+  
 
   # ============================================================================
   # Odoo 18 con módulos custom (omnichannel, CRM, helpdesk, VoIP, WhatsApp)
@@ -61,7 +60,3 @@ services:
 volumes:
   odoo-db-data:
   odoo-data:
-
-networks:
-  odoo-network:
-    driver: bridge
