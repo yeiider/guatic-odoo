@@ -3,11 +3,11 @@ set -e
 
 # =============================================================================
 # Mapeo de variables de entorno a los argumentos de línea de comandos de Odoo
-# Usamos nombres únicos (DB_HOST, DB_USER, etc.) para evitar conflictos
-# con variables del sistema como HOST/USER
+# Usamos CLI args en vez de exportar HOST/USER/PORT para evitar conflictos
+# con variables del sistema que Coolify pueda interpretar mal
 # =============================================================================
 
-# Construir argumentos de base de datos
+# Construir argumentos de base de datos para Odoo
 DB_ARGS=""
 
 if [ -n "$DB_HOST" ]; then
@@ -30,9 +30,6 @@ if [ -n "$DB_NAME" ]; then
     DB_ARGS="$DB_ARGS --database=$DB_NAME"
 fi
 
-# Los argumentos de línea de comandos sobreescriben el archivo de configuración
-# Esto es clave porque odoo.conf tiene valores hardcodeados
-set -- "$@" $DB_ARGS
-
-# Ejecutar el entrypoint original de Odoo con los argumentos adicionales
-exec /entrypoint.sh "$@"
+# Los argumentos CLI sobreescriben el archivo odoo.conf
+# Ejecutar el entrypoint original de Odoo con args adicionales
+exec /entrypoint.sh $DB_ARGS "$@"
