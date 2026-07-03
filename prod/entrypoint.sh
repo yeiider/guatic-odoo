@@ -2,34 +2,15 @@
 set -e
 
 # =============================================================================
-# Mapeo de variables de entorno a los argumentos de línea de comandos de Odoo
-# Usamos CLI args en vez de exportar HOST/USER/PORT para evitar conflictos
-# con variables del sistema que Coolify pueda interpretar mal
+# Mapeo DB_HOST/DB_USER/DB_PASSWORD/DB_PORT/DB_NAME → HOST/USER/PASSWORD/PORT/DB_NAME
+# para que el entrypoint original de Odoo los use (vía : ${HOST:=...})
 # =============================================================================
 
-# Construir argumentos de base de datos para Odoo
-DB_ARGS=""
+[ -n "$DB_HOST" ] && export HOST="$DB_HOST"
+[ -n "$DB_USER" ] && export USER="$DB_USER"
+[ -n "$DB_PASSWORD" ] && export PASSWORD="$DB_PASSWORD"
+[ -n "$DB_PORT" ] && export PORT="$DB_PORT"
+[ -n "$DB_NAME" ] && export DB_NAME="$DB_NAME"
 
-if [ -n "$DB_HOST" ]; then
-    DB_ARGS="$DB_ARGS --db_host=$DB_HOST"
-fi
-
-if [ -n "$DB_PORT" ]; then
-    DB_ARGS="$DB_ARGS --db_port=$DB_PORT"
-fi
-
-if [ -n "$DB_USER" ]; then
-    DB_ARGS="$DB_ARGS --db_user=$DB_USER"
-fi
-
-if [ -n "$DB_PASSWORD" ]; then
-    DB_ARGS="$DB_ARGS --db_password=$DB_PASSWORD"
-fi
-
-if [ -n "$DB_NAME" ]; then
-    DB_ARGS="$DB_ARGS --database=$DB_NAME"
-fi
-
-# Los argumentos CLI sobreescriben el archivo odoo.conf
-# Ejecutar el entrypoint original de Odoo con args adicionales
-exec /entrypoint.sh $DB_ARGS "$@"
+# Ejecutar el entrypoint original de Odoo
+exec /entrypoint.sh "$@"
