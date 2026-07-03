@@ -1,0 +1,95 @@
+<templates>
+    <t t-name="mail.HistoryMessage" owl="1">
+        <div class="o-mail-HistoryMessage d-flex mb-3"
+            t-att-class="{ 'o-mail-HistoryMessage--system': isSystemMessage }">
+
+            <!-- Avatar -->
+            <div class="o-mail-HistoryMessage-avatar me-2" t-if="!isSystemMessage">
+                <img t-if="props.message.author_avatar"
+                    t-att-src="props.message.author_avatar"
+                    class="rounded-circle"
+                    width="32"
+                    height="32"
+                    t-att-alt="props.message.author_name" />
+                <div t-else=""
+                    class="o-mail-HistoryMessage-avatarPlaceholder rounded-circle d-flex align-items-center justify-content-center bg-secondary text-white"
+                    style="width: 32px; height: 32px; font-size: 14px;">
+                    <t
+                        t-esc="props.message.author_name ? props.message.author_name[0].toUpperCase() : '?'" />
+                </div>
+            </div>
+
+            <div class="o-mail-HistoryMessage-content flex-grow-1">
+                <!-- Header con nombre y timestamp -->
+                <div class="o-mail-HistoryMessage-header d-flex align-items-center mb-1"
+                    t-if="!isSystemMessage">
+                    <strong class="o-mail-HistoryMessage-authorName me-2 text-primary"
+                        t-esc="props.message.author_name" />
+                    <small class="o-mail-HistoryMessage-timestamp text-muted"
+                        t-esc="formattedTimestamp" />
+                </div>
+
+                <!-- Contenido del mensaje -->
+                <div class="o-mail-HistoryMessage-body">
+                    <div t-if="isSystemMessage"
+                        class="o-mail-HistoryMessage-systemContent text-muted fst-italic">
+                        <i class="fa fa-info-circle me-1" />
+                        <span t-esc="props.message.content" />
+                        <small class="ms-2" t-esc="formattedTimestamp" />
+                    </div>
+
+                    <div t-else="" class="o-mail-HistoryMessage-textContent">
+                        <t t-esc="props.message.content" />
+                    </div>
+
+                    <!-- Attachments -->
+                    <div t-if="hasAttachments" class="o-mail-HistoryMessage-attachments mt-2">
+                        <div t-foreach="props.message.attachments"
+                            t-as="attachment"
+                            t-key="attachment.id"
+                            class="o-mail-HistoryMessage-attachment mb-2">
+
+                            <!-- Imagen con preview -->
+                            <div
+                                t-if="attachment.mimetype and attachment.mimetype.startsWith('image/')"
+                                class="o-mail-HistoryMessage-imageAttachment">
+                                <img t-att-src="attachment.preview_url || attachment.download_url"
+                                    class="img-thumbnail"
+                                    style="max-width: 200px; max-height: 200px; cursor: pointer;"
+                                    t-att-alt="attachment.filename"
+                                    t-on-click="() => onDownloadAttachment(attachment)" />
+                                <div class="small text-muted mt-1">
+                                    <i class="fa fa-download me-1" />
+                                    <span t-esc="attachment.filename" />
+                                    <span t-if="attachment.size" class="ms-1"> (<t
+                                            t-esc="formatFileSize(attachment.size)" />) </span>
+                                </div>
+                            </div>
+
+                            <!-- Otros archivos -->
+                            <div t-else=""
+                                class="o-mail-HistoryMessage-fileAttachment d-flex align-items-center p-2 border rounded bg-light">
+
+                                <i
+                                    t-att-class="getFileIcon(attachment.mimetype) + ' me-2 text-primary'" />
+                                <div class="flex-grow-1">
+                                    <div class="fw-medium" t-esc="attachment.filename" />
+                                    <div class="small text-muted">
+                                        <span t-if="attachment.size"
+                                            t-esc="formatFileSize(attachment.size)" />
+                                        <span t-if="attachment.mimetype" class="ms-2"
+                                            t-esc="getMimeTypeExtension(attachment.mimetype)" />
+                                    </div>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary"
+                                    t-on-click="() => onDownloadAttachment(attachment)">
+                                    <i class="fa fa-download" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

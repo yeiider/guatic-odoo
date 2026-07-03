@@ -1,0 +1,30 @@
+<odoo>
+
+    <!-- Vista de árbol -->
+    <record id="view_list_crm_asertis_metas" model="ir.ui.view"> 
+        <field name="name">view.list.crm.asertis.metas</field>
+        <field name="model">crm_asertis_metas</field>
+        <field name="arch" type="xml">
+            <list editable="top">
+                <field name="meta"/>
+                <field name="create_date" string="Creado el"/> 
+                <field name="create_uid" string="Creado por"/> 
+            </list>
+        </field>
+    </record>
+
+
+    <!-- Acción -->
+    <record id="action_crm_asertis_metas" model="ir.actions.act_window"> 
+        <field name="name">Metas</field>
+        <field name="res_model">crm_asertis_metas</field>
+        <field name="view_mode">list</field>
+    </record>
+
+
+    <!-- Menuitem -->
+    <menuitem id="menu_crm_asertis_metas" parent="menu_crm_asertis_servicios_p" action="asertis_crm.action_crm_asertis_metas"/>
+
+
+
+</odoo>

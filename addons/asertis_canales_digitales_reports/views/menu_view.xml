@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menú principal -->
+    <menuitem id="api_reporting_main_menu"
+        name="Asertis Canales Digitales Reportes"
+        sequence="100"
+        web_icon="asertis_canales_digitales_reports,static/description/icon.png"
+    />
+
+
+    <!-- Submenú Configuración -->
+    <menuitem id="api_reporting_config_menu"
+        name="Configuración "
+        parent="api_reporting_main_menu"
+        action="api_config_action"
+        sequence="1" />
+
+
+    <!-- Acción para dashboard web -->
+    <record id="api_report_dashboard_web_action" model="ir.actions.act_url">
+        <field name="name">Dashboard </field>
+        <field name="url">/api_reporting/dashboard</field>
+        <field name="target">self</field>
+    </record>
+
+    <!-- Menú Dashboard Web -->
+    <menuitem id="api_reporting_dashboard_web_menu"
+        name="Dashboard "
+        parent="api_reporting_main_menu"
+        action="api_report_dashboard_web_action"
+        sequence="2" />
+</odoo>

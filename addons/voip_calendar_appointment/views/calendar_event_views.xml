@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_calendar_event_form_inherit_button" model="ir.ui.view">
+        <field name="name">calendar.event.form.inherit.button</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Localizamos el grupo donde está el botón de correo -->
+            <xpath expr="//div[@name='send_buttons']" position="inside">
+                <button name="action_send_template_message"
+                        type="object"
+                        string="Whatsapp"
+                        class="btn btn-secondary">
+                    <i class="o_button_icon fa fa-fw fa-whatsapp me-1"/>
+                </button>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

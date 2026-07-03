@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_whatsapp_asertis_template_param_form" model="ir.ui.view">
+        <field name="name">whatsapp.aseritis.template.param.form</field>
+        <field name="model">whatsapp.asertis.template.param</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" />
+                        <field name="template_id" widget="many2one" options="{'no_create': True}" />
+                        <field name="display_name" />
+                        <field name="sequence" />
+
+                        <field name="active" />
+                    </group>
+
+                    <group>
+                        <field name="model" readonly="1"/>
+                        <field name="field_name" />
+                        <field name="field_string" />
+                        <field name="field_type" />
+                    </group>
+                    <group>
+                        <field name="format_type" />
+                        <field name="date_format" />
+                        <field name="datetime_format" />
+                        <field name="decimal_places" />
+                        <field name="currency_symbol" />
+                        <field name="boolean_false_text" />
+                    </group>
+                    <group>
+                        <field name="notes" readonly="1" />
+
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_whatsapp_asertis_template_param_list" model="ir.ui.view">
+        <field name="name">whatsapp.asertis.template.param.list</field>
+        <field name="model">whatsapp.asertis.template.param</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" />
+                <field name="template_id" />
+                <field name="display_name" />
+                <field name="active" />
+            </list>
+        </field>
+    </record>
+</odoo>

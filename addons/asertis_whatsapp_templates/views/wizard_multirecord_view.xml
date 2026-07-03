@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Vista del wizard para envío múltiple -->
+    <record id="view_whatsapp_asertis_template_multi_send_wizard" model="ir.ui.view">
+        <field name="name">whatsapp.asertis.template.multi.send.wizard.form</field>
+        <field name="model">whatsapp.asertis.template.multi.send.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Enviar Plantilla WhatsApp">
+                <!-- Campos ocultos -->
+                <group invisible="1">
+                    <field name="model" />
+                    <field name="model_id" />
+                    <field name="record_ids" />
+                </group>
+
+                <sheet>
+                    <!-- Selección de plantilla -->
+                    <group string="Seleccionar Plantilla">
+                        <field name="template_id"
+                            domain="[('model_id', '=', model_id), ('active', '=', True)]"
+                            options="{'no_create': True, 'no_create_edit': True}"
+                            placeholder="Seleccione una plantilla..." />
+                    </group>
+                </sheet>
+
+                <footer>
+                    <button string="Enviar"
+                        type="object"
+                        name="action_send_template"
+                        class="btn-primary" />
+                    <button string="Cancelar" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción del wizard -->
+    <record id="action_whatsapp_asertis_template_multi_send_wizard" model="ir.actions.act_window">
+        <field name="name">Enviar Plantilla WhatsApp</field>
+        <field name="res_model">whatsapp.asertis.template.multi.send.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_whatsapp_asertis_template_multi_send_wizard" />
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="crm.model_crm_lead"/>
+        <field name="binding_view_types">list</field>
+    </record>
+
+</odoo>

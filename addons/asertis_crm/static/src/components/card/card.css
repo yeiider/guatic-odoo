@@ -1,0 +1,52 @@
+.crm-mov-icon {
+    float: right;
+    font-size: 500%;
+    position: absolute;
+    top: 0rem;
+    right: -0.3rem;
+    opacity: .16;
+}
+
+.green {
+    background: #008c44;
+    color: #fff;
+}
+
+.crm-mov-blue-gradient {
+    background: linear-gradient(180deg, #019ff4c4 0%, #019df4 50%);
+    color: #fff;
+}
+
+.crm-mov-red-gradient {
+    background: linear-gradient(180deg, #f50f0fc4 0%, #e92020 50%);
+    color: #fff;
+}
+
+.crm-mov-blue-dark-gradient {
+    background: linear-gradient(180deg, #102a43bd 0%, #102a43 50%);
+    color: #fff;
+}
+
+.crm-mov-card {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 1px 1px 3px rgb(0 0 0 / 63%);
+    display: inline-block;
+    float: left;
+    padding: 0.8em;
+    border-radius: 0.3em;
+    min-width: 170px;
+}
+
+.crm-mov-card-value {
+    display: block;
+    font-size: 120%;
+    font-weight: bolder;
+}
+
+.crm-mov-card-text {
+    display: block;
+    /* font-size: 70%; */
+    padding-left: 0.2em;
+}

@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_chat_provider_admin,chat.provider.admin,model_chat_provider,base.group_system,1,1,1,1
+access_chat_provider_user,chat.provider.user,model_chat_provider,base.group_user,1,1,1,0
+access_chat_channel_type_admin,chat.channel.type.admin,model_chat_channel_type,base.group_system,1,1,1,1
+access_chat_channel_type_user,chat.channel.type.user,model_chat_channel_type,base.group_user,1,0,0,0
+access_provider_skill_admin,provider.skill.admin,model_provider_skill,base.group_system,1,1,1,1
+access_provider_skill_user,provider.skill.user,model_provider_skill,base.group_user,1,0,0,0
+access_provider_skill_import_wizard_admin,provider.skill.import.wizard admin,model_provider_skill_import_wizard,base.group_system,1,1,1,1
+access_provider_skill_import_wizard_user,provider.skill.import.wizard user,model_provider_skill_import_wizard,base.group_user,1,0,0,0
+access_webhook_processor,Webhook Processor,model_webhook_processor,base.group_user,1,0,0,0
+access_message_history,message.history,model_message_history,base.group_user,1,1,1,1
+access_message_history_line,message.history.line,model_message_history_line,base.group_user,1,1,1,1

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Wizard (modal) de importación -->
+        <record id="view_import_provider_skills_wizard" model="ir.ui.view">
+            <field name="name">provider.skill.import.wizard.form</field>
+            <field name="model">provider.skill.import.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Importar Habilidades desde Excel">
+                    <header>
+                        <button string="Cerrar" class="btn-secondary" special="cancel" />
+                    </header>
+
+                    <sheet>
+                        <!-- Título principal con icono -->
+                        <div class="oe_title" style="text-align: center; margin-bottom: 30px;">
+                            <h1 style="margin-bottom: 10px;">
+                                <i class="fa fa-upload" style="color: #875a7b; margin-right: 10px;" />
+                                Importar Habilidades </h1>
+                            <p style="color: #666; margin-top: 5px; font-size: 16px;">
+                                Sube un archivo Excel con las habilidades de los proveedores
+                            </p>
+                        </div>
+
+                        <hr style="margin: 20px 0;" />
+
+                        <!-- Sección: Plantilla -->
+                        <group string="📋 Paso 1: Descargar Plantilla">
+                            <group colspan="2" col="2">
+                                <group colspan="1" class="alert alert-info" style="max-width: 100%; float: left;">
+
+                                    <i class="fa fa-info-circle" style="margin-right: 8px;" />
+                                    <strong>
+                                        Importante:</strong>
+                                    <br />
+                                    <div style="width: 100%;">
+                                        <p style="color: #666; margin-top: 5px; width: 100%; font-size: 1.2rem;">Descarga
+                                            la plantilla antes de importar
+                                            para asegurar el formato correcto. </p>
+                                    </div>
+                                </group>
+                                <group colspan="2" style="max-width: 100%;  display: flex;">
+                                    <button string="📥 Descargar Plantilla Excel " type="object" name="action_download_template" class="btn-primary" style="padding: 5px 10px; width: max-content; font-size: 1rem; border-radius: 5px; margin-top: 10px;" />
+                                </group>
+                            </group>
+                        </group>
+
+                        <separator style="margin: 20px 0;" />
+
+                        <!-- Sección: Importar archivo -->
+                        <group string="📤 Paso 2: Cargar Archivo">
+                            <div class="alert alert-warning" style="margin: 10px 0; max-width: 70%;">
+                                <i class="fa fa-exclamation-triangle" style="margin-right: 8px;" />
+                                <strong>Formato
+                                requerido:</strong> Solo archivos Excel (.xlsx, .xls) </div>
+
+                            <group colspan="2" col="2" style="max-width: 100%; justify-content: start;">
+                                <group colspan="2" style=" max-width: max-content;padding: 15px; border: 2px dashed #ccc; border-radius: 8px; text-align: center; background-color: #f9f9f9; margin-right: 20px;">
+
+
+                                    <div style="    display: flex ;     flex-direction: column;     align-items: center;     width: max-content;     max-width: 200px; ">
+                                        <i class="fa fa-cloud-upload" style="font-size: 48px; color: #ccc; margin-bottom: 10px ;width: 30vw;" />
+                                        <field name="file" filename="file_name" string="Seleccionar archivo Excel" style="margin: 10px 0;" />
+                                        <field name="file_name" invisible="1" />
+                                        <p style="color: #666; font-size: 12px; margin-top: 10px;">
+                                            Arrastra tu archivo aquí o haz clic para seleccionar
+                                        </p>
+                                    </div>
+                                </group>
+                                <group colspan="2" style="max-width: 35%; float: right; text-align: center; padding-top: 40px; display: flex; ">
+                                    <button string="🚀 Procesar Archivo" type="object" name="action_import_file" class="btn-success" style="padding: 12px 25px; font-size: 16px; font-weight: bold; border-radius: 5px; max-width: max-content; " invisible="file==False" />
+                                </group>
+                            </group>
+                        </group>
+
+                        <separator style="margin: 20px 0;" />
+
+                        <!-- Sección: Resultado -->
+                        <group string="📊 Resultado de la Importación" invisible="result==False" style="max-width: 100%;">
+                            <div class="alert alert-success" style="margin: 10px 0; width: 25vw; max-width: max-content;">
+                                <i class="fa fa-check-circle" style="margin-right: 8px; color: #5cb85c;" />
+                                <strong>Importación completada</strong>
+                            </div>
+                            <div style="background-color: #f5f5f5; padding: 15px; border-radius: 5px; border-left: 4px solid #5cb85c; width: 50vw;max-width: max-content;">
+                                <field name="result" readonly="1" nolabel="1" widget="text" style="font-family: monospace; font-size: 13px; line-height: 1.5;" />
+                            </div>
+                        </group>
+
+                        <separator style="margin: 20px 0;" />
+
+                        <!-- Sección: Ayuda -->
+                        <group style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 4px solid #17a2b8; max-width: 100%; margin: 0 auto;" string="❓ Ayuda">
+
+                            <h4 style="color: #17a2b8; margin-bottom: 15px;   width: max-content;">
+                                <i class="fa fa-question-circle" style="margin-right: 8px;" />
+                                ¿Necesitas ayuda? </h4>
+
+                            <ul style="margin: 0;width: 75vw;max-width: max-content;padding-left: 20px;list-style-type: unset;">
+                                <li style="margin-bottom: 5px;">Descarga la plantilla
+                                    Excel con el formato correcto</li>
+                                <li style="margin-bottom: 5px;">Completa los datos en
+                                    las columnas correspondientes</li>
+                                <li style="margin-bottom: 5px;">Guarda el archivo y
+                                    súbelo usando el botón "Seleccionar archivo"</li>
+                                <li style="margin-bottom: 5px;">Haz clic en "Procesar
+                                    Archivo" para importar los datos</li>
+                            </ul>
+
+
+                        </group>
+                    </sheet>
+
+                    <footer>
+                        <button string="Guardar y Cerrar" class="btn-primary" special="save" />
+                        <button string="Cancelar" class="btn-secondary" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Acción para abrir el wizard -->
+        <record id="action_open_import_wizard_direct" model="ir.actions.act_window">
+            <field name="name">Importar Habilidades de Proveedores</field>
+            <field name="res_model">provider.skill.import.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="view_import_provider_skills_wizard" />
+            <field name="context">{'default_file_name': 'provider_skills_template.xlsx'}</field>
+        </record>
+    </data>
+</odoo>

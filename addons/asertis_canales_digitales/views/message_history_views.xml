@@ -1,0 +1,229 @@
+<!-- views/message_history_views.xml -->
+<odoo>
+    <!-- Vista formulario para el historial de mensajes -->
+    <record id="view_message_history_form" model="ir.ui.view">
+        <field name="name">message.history.form</field>
+        <field name="model">message.history</field>
+        <field name="arch" type="xml">
+            <form string="Historial de Mensajes">
+                <header>
+                    <button name="get_message_history" string="Actualizar Historial" 
+                            type="object" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="channel_id" readonly="1"/>
+                        </h1>
+                    </div>
+                    
+                    <notebook>
+                        <page string="Mensajes">
+                            <field name="message_ids" nolabel="1" 
+                                   widget="one2many" mode="tree,kanban">
+                                <tree decoration-info="sender_type == 'me'" 
+                                      decoration-warning="sender_type == 'bot'"
+                                      decoration-muted="sender_type == 'user'"
+                                      create="false" edit="false" delete="false">
+                                    <field name="timestamp"/>
+                                    <field name="sender_type"/>
+                                    <field name="sender_name"/>
+                                    <field name="message_type"/>
+                                    <field name="display_content"/>
+                                    <field name="media_filename" 
+                                           attrs="{'invisible': [('message_type', '=', 'text')]}"/>
+                                </tree>
+                                
+                                <kanban class="o_message_history_kanban" create="false" edit="false" delete="false">
+                                    <field name="sender_type"/>
+                                    <field name="sender_name"/>
+                                    <field name="message_text"/>
+                                    <field name="timestamp"/>
+                                    <field name="message_type"/>
+                                    <field name="media_url"/>
+                                    <field name="media_filename"/>
+                                    <field name="thumbnail_url"/>
+                                    <field name="latitude"/>
+                                    <field name="longitude"/>
+                                    <field name="location_name"/>
+                                    <field name="display_content"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div class="oe_kanban_card oe_kanban_global_click">
+                                                <div class="o_message_bubble" 
+                                                     t-attf-class="o_message_#{record.sender_type.raw_value}">
+                                                    <div class="o_message_header">
+                                                        <span class="o_message_sender" 
+                                                              t-attf-class="text-#{record.sender_type.raw_value === 'me' ? 'primary' : record.sender_type.raw_value === 'bot' ? 'warning' : 'muted'}">
+                                                            <t t-if="record.sender_type.raw_value === 'me'">
+                                                                <i class="fa fa-user text-primary"/> Yo
+                                                            </t>
+                                                            <t t-elif="record.sender_type.raw_value === 'bot'">
+                                                                <i class="fa fa-robot text-warning"/> Bot
+                                                            </t>
+                                                            <t t-else="">
+                                                                <i class="fa fa-user-o text-muted"/> 
+                                                                <field name="sender_name"/>
+                                                            </t>
+                                                        </span>
+                                                        <span class="o_message_time text-muted">
+                                                            <field name="timestamp"/>
+                                                        </span>
+                                                    </div>
+                                                    
+                                                    <!-- Contenido multimedia -->
+                                                    <div class="o_message_content">
+                                                        <!-- Imagen -->
+                                                        <t t-if="record.message_type.raw_value === 'image'">
+                                                            <div class="o_message_media">
+                                                                <img t-att-src="record.media_url.raw_value or record.thumbnail_url.raw_value" 
+                                                                     class="o_message_image" 
+                                                                     alt="Imagen"
+                                                                     t-att-title="record.media_filename.raw_value"/>
+                                                                <t t-if="record.message_text.raw_value">
+                                                                    <div class="o_message_caption">
+                                                                        <field name="message_text"/>
+                                                                    </div>
+                                                                </t>
+                                                            </div>
+                                                        </t>
+                                                        
+                                                        <!-- Video -->
+                                                        <t t-elif="record.message_type.raw_value === 'video'">
+                                                            <div class="o_message_media">
+                                                                <div class="o_message_video_preview">
+                                                                    <i class="fa fa-play-circle fa-3x text-white"/>
+                                                                    <img t-if="record.thumbnail_url.raw_value" 
+                                                                         t-att-src="record.thumbnail_url.raw_value" 
+                                                                         class="o_message_video_thumb" 
+                                                                         alt="Video"/>
+                                                                </div>
+                                                                <div class="o_message_file_info">
+                                                                    <i class="fa fa-video-camera"/> Video
+                                                                    <span t-if="record.media_filename.raw_value" 
+                                                                          class="o_filename">
+                                                                        <field name="media_filename"/>
+                                                                    </span>
+                                                                </div>
+                                                                <t t-if="record.message_text.raw_value">
+                                                                    <div class="o_message_caption">
+                                                                        <field name="message_text"/>
+                                                                    </div>
+                                                                </t>
+                                                            </div>
+                                                        </t>
+                                                        
+                                                        <!-- Audio -->
+                                                        <t t-elif="record.message_type.raw_value === 'audio'">
+                                                            <div class="o_message_media">
+                                                                <div class="o_message_audio">
+                                                                    <i class="fa fa-volume-up fa-2x"/>
+                                                                    <div class="o_message_file_info">
+                                                                        <strong>Mensaje de Audio</strong>
+                                                                        <span t-if="record.media_filename.raw_value" 
+                                                                              class="o_filename">
+                                                                            <field name="media_filename"/>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </t>
+                                                        
+                                                        <!-- Archivo -->
+                                                        <t t-elif="record.message_type.raw_value === 'file'">
+                                                            <div class="o_message_media">
+                                                                <div class="o_message_file">
+                                                                    <i class="fa fa-file-o fa-2x"/>
+                                                                    <div class="o_message_file_info">
+                                                                        <strong t-if="record.media_filename.raw_value">
+                                                                            <field name="media_filename"/>
+                                                                        </strong>
+                                                                        <span t-else="">Archivo adjunto</span>
+                                                                        <div t-if="record.media_size.raw_value" 
+                                                                             class="text-muted small">
+                                                                            <field name="media_size"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </t>
+                                                        
+                                                        <!-- Ubicación -->
+                                                        <t t-elif="record.message_type.raw_value === 'location'">
+                                                            <div class="o_message_media">
+                                                                <div class="o_message_location">
+                                                                    <i class="fa fa-map-marker fa-2x"/>
+                                                                    <div class="o_message_file_info">
+                                                                        <strong t-if="record.location_name.raw_value">
+                                                                            <field name="location_name"/>
+                                                                        </strong>
+                                                                        <span t-else="">Ubicación compartida</span>
+                                                                        <div class="text-muted small">
+                                                                            Lat: <field name="latitude"/>, 
+                                                                            Lng: <field name="longitude"/>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </t>
+                                                        
+                                                        <!-- Sticker -->
+                                                        <t t-elif="record.message_type.raw_value === 'sticker'">
+                                                            <div class="o_message_media">
+                                                                <img t-att-src="record.media_url.raw_value" 
+                                                                     class="o_message_sticker" 
+                                                                     alt="Sticker"/>
+                                                            </div>
+                                                        </t>
+                                                        
+                                                        <!-- Texto normal -->
+                                                        <t t-else="">
+                                                            <field name="message_text"/>
+                                                        </t>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción para abrir el historial -->
+    <record id="action_message_history" model="ir.actions.act_window">
+        <field name="name">Historial de Mensajes</field>
+        <field name="res_model">message.history</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Vista extendida del canal de mail para agregar el botón -->
+    <record id="view_mail_channel_form_inherit" model="ir.ui.view">
+        <field name="name">mail.channel.form.inherit</field>
+        <field name="model">mail.channel</field>
+        <field name="inherit_id" ref="mail.mail_channel_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Agregar botón antes del botón de videollamada -->
+            <xpath expr="//button[@name='action_call']" position="before">
+                <button name="action_show_message_history" 
+                        string="Historial" 
+                        type="object" 
+                        class="btn-secondary o_mail_channel_history_btn"
+                        icon="fa-history"
+                        attrs="{'invisible': [('is_provider_channel', '=', False)]}"
+                        help="Ver historial de mensajes de la plataforma externa"/>
+            </xpath>
+            
+            <!-- Agregar campos adicionales -->
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="is_provider_channel"/>
+                <field name="provider_id" attrs="{'invisible': [('is_provider_channel', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

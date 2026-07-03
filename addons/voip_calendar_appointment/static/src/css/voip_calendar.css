@@ -1,0 +1,41 @@
+/* Estilos para la integración VoIP-Calendar */
+
+.o_voip_calendar_button {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+}
+
+.o_voip_calendar_button:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.o_voip_calendar_info {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    padding: 1rem;
+    margin-top: 1rem;
+}
+
+.o_calendar_event_voip_badge {
+    background-color: #17a2b8;
+    color: white;
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+}
+
+/* Iconos personalizados */
+.fa-calendar-plus-o:before {
+    content: "\f271";
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .o_voip_calendar_button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}

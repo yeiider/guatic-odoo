@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vista de formulario heredada -->
+        <record id="view_voip_call_form_inherit_calendar" model="ir.ui.view">
+            <field name="name">voip.call.form.inherit.calendar</field>
+            <field name="model">voip.call</field>
+            <field name="inherit_id" ref="voip.view_voip_call_form" />
+            <field name="arch" type="xml">
+                <!-- Agregar botones en el header -->
+                <header position="inside">
+                    <button name="action_schedule_appointment"
+                        string="Agendar Cita"
+                        type="object"
+                        class="btn-primary"
+                        icon="fa-calendar-plus-o" />
+                    <button name="action_view_appointments"
+                        string="Ver Citas"
+                        type="object"
+                        class="btn-secondary"
+                        icon="fa-calendar"
+                        invisible="calendar_event_count == 0" />
+                </header>
+
+                <!-- Agregar información de citas en el formulario -->
+                <xpath expr="//sheet" position="inside">
+                    <group name="calendar_info" string="Información de Citas"
+                        invisible="calendar_event_count == 0">
+                        <field name="calendar_event_count" />
+                        <field name="calendar_event_ids" nolabel="1">
+                            <tree>
+                                <field name="name" />
+                                <field name="start" />
+                                <field name="stop" />
+                                <field name="state" />
+                                <button name="action_view_voip_call"
+                                    string="Ver Llamada"
+                                    type="object"
+                                    icon="fa-phone" />
+                            </tree>
+                        </field>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Vista de lista heredada -->
+        <record id="view_voip_call_tree_inherit_calendar" model="ir.ui.view">
+            <field name="name">voip.call.tree.inherit.calendar</field>
+            <field name="model">voip.call</field>
+            <field name="inherit_id" ref="voip.view_voip_call_tree" />
+            <field name="arch" type="xml">
+                <!-- Agregar columna de citas -->
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="calendar_event_count" string="Citas" />
+                </xpath>
+
+                <!-- Agregar botón de acción -->
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="decoration-info">calendar_event_count > 0</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Acción del servidor para agendar cita rápida -->
+        <record id="action_voip_schedule_appointment_server" model="ir.actions.server">
+            <field name="name">Agendar Cita Rápida</field>
+            <field name="model_id" ref="voip.model_voip_call" />
+            <field name="binding_model_id" ref="voip.model_voip_call" />
+            <field name="state">code</field>
+            <field name="code">
+                for record in records:
+                action = record.action_schedule_appointment()
+            </field>
+        </record>
+
+        <!-- Menú de acceso rápido -->
+        <record id="action_voip_calendar_quick_access" model="ir.actions.act_window">
+            <field name="name">Agendar Cita desde VoIP</field>
+            <field name="res_model">calendar.event</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+            <field name="context">{
+                'default_user_id': uid,
+                'default_name': 'Cita telefónica',
+                }</field>
+        </record>
+
+        <menuitem id="menu_voip_calendar_appointment"
+            name="Agendar Cita"
+            parent="voip.menu_voip_config"
+            action="action_voip_calendar_quick_access"
+            sequence="60" />
+    </data>
+</odoo>

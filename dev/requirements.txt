@@ -1,0 +1,13 @@
+asterisk-ami==0.1.7
+et_xmlfile==2.0.0
+numpy==2.3.4
+openpyxl==3.1.5
+pandas==2.3.3
+python-dateutil==2.9.0.post0
+pytz==2025.2
+six==1.17.0
+tzdata==2025.2
+packaging==24.1
+cachetools==6.2.1
+boto3==1.40.61
+panoramisk==1.4

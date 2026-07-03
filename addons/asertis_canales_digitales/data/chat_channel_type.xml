@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="channel_whatsapp" model="chat.channel.type">
+            <field name="name">WhatsApp</field>
+            <field name="code">whatsapp</field>
+        </record>
+        <record id="channel_facebook_messenger" model="chat.channel.type">
+            <field name="name">Facebook Messenger</field>
+            <field name="code">facebook_messenger</field>
+        </record>
+        <record id="channel_instagram" model="chat.channel.type">
+            <field name="name">Instagram</field>
+            <field name="code">instagram</field>
+        </record>
+        <record id="channel_telegram" model="chat.channel.type">
+            <field name="name">Telegram</field>
+            <field name="code">telegram</field>
+        </record>
+        <record id="channel_viber" model="chat.channel.type">
+            <field name="name">Viber</field>
+            <field name="code">viber</field>
+        </record>
+        <record id="channel_signal" model="chat.channel.type">
+            <field name="name">Signal</field>
+            <field name="code">signal</field>
+        </record>
+        <record id="channel_webchat" model="chat.channel.type">
+            <field name="name">Web Chat</field>
+            <field name="code">wechat</field>
+        </record>
+        <record id="channel_line" model="chat.channel.type">
+            <field name="name">Line</field>
+            <field name="code">line</field>
+        </record>
+        <record id="channel_sms" model="chat.channel.type">
+            <field name="name">SMS</field>
+            <field name="code">sms</field>
+        </record>
+        <record id="channel_web" model="chat.channel.type">
+            <field name="name">Web</field>
+            <field name="code">web</field>
+        </record>
+        <record id="channel_facebook_wall" model="chat.channel.type">
+            <field name="name">Facebook Wall</field>
+            <field name="code">facebook_wall</field>
+        </record>
+        <record id="channel_twitter" model="chat.channel.type">
+            <field name="name">Twitter</field>
+            <field name="code">twitter</field>
+        </record>
+        <record id="channel_slack" model="chat.channel.type">
+            <field name="name">Slack</field>
+            <field name="code">slack</field>
+        </record>
+        <record id="channel_discord" model="chat.channel.type">
+            <field name="name">Discord</field>
+            <field name="code">discord</field>
+        </record>
+        <record id="channel_mercado_libre" model="chat.channel.type">
+            <field name="name">Mercado Libre</field>
+            <field name="code">mercado_libre</field>
+        </record>
+        <record id="channel_tiktok" model="chat.channel.type">
+            <field name="name">TikTok</field>
+            <field name="code">tiktok</field>
+        </record>
+        <record id="channel_youtube" model="chat.channel.type">
+            <field name="name">YouTube</field>
+            <field name="code">youtube</field>
+        </record>
+        <record id="channel_twilio" model="chat.channel.type">
+            <field name="name">Twilio</field>
+            <field name="code">twilio</field>
+        </record>
+    </data>
+</odoo>

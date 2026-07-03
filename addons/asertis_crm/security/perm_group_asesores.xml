@@ -1,0 +1,85 @@
+<odoo>
+
+    <!-- ########################################
+    #         ACCESOS DEL GRUPO ASESORES        #
+    ###########################################-->
+
+      <!-- Acceso al CRM (raíz) -->
+    <record id="access_asesor_crm_asertis" model="ir.model.access">
+        <field name="name">access.asesor.crm.asertis</field>
+        <field name="model_id" ref="asertis_crm.model_crm_asertis"/>
+        <field name="group_id" ref="asertis_crm.group_crm_asertis_asesor"/>
+        <field name="perm_read" eval="1"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="1"/>
+        <field name="perm_unlink" eval="1"/>
+    </record>
+
+      <!-- Acceso al crm_asertis_stages (etapas del CRM) -->
+      <record id="access_asesor_crm_asertis_stages" model="ir.model.access">
+            <field name="name">access.asesor.crm.asertis.stages</field>
+            <field name="model_id" ref="asertis_crm.model_crm_asertis_stages"/>
+            <field name="group_id" ref="asertis_crm.group_crm_asertis_asesor"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+      </record>
+
+      <!-- Acceso al crm_asertis_servicios (servicios del CRM) -->
+      <record id="access_asesor_crm_asertis_servicios" model="ir.model.access">
+            <field name="name">access.asesor.crm.asertis.servicios</field>
+            <field name="model_id" ref="asertis_crm.model_crm_asertis_servicios"/>
+            <field name="group_id" ref="asertis_crm.group_crm_asertis_asesor"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+      </record>
+      
+      <!-- Acceso al crm_asertis_actividades (actividades del CRM) -->
+      <record id="access_asesor_crm_asertis_actividades" model="ir.model.access">
+            <field name="name">access.asesor.crm.asertis.actividades</field>
+            <field name="model_id" ref="asertis_crm.model_crm_asertis_actividades"/>
+            <field name="group_id" ref="asertis_crm.group_crm_asertis_asesor"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+      </record>
+
+      <!-- Acceso al crm_asertis_actividades_wizard (actividades (wizard) del CRM) -->
+      <record id="access_asesor_crm_asertis_actividades_wizard" model="ir.model.access">
+            <field name="name">access.asesor.crm.asertis.actividades.wizard</field>
+            <field name="model_id" ref="asertis_crm.model_crm_asertis_actividades_wizard"/>
+            <field name="group_id" ref="asertis_crm.group_crm_asertis_asesor"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+      </record>
+
+      <!-- Acceso al crm_asertis_clientes (clientes del CRM) -->
+      <record id="access_asesor_crm_asertis_clientes" model="ir.model.access">
+            <field name="name">access.asesor.crm.asertis.clientes</field>
+            <field name="model_id" ref="asertis_crm.model_crm_asertis_clientes"/>
+            <field name="group_id" ref="asertis_crm.group_crm_asertis_asesor"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+      </record>
+
+      <!-- Acceso al crm_asertis_metas (metas del CRM) -->
+      <record id="access_asesor_crm_asertis_metas" model="ir.model.access">
+            <field name="name">access.asesor.crm.asertis.metas</field>
+            <field name="model_id" ref="asertis_crm.model_crm_asertis_metas"/>
+            <field name="group_id" ref="asertis_crm.group_crm_asertis_asesor"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="1"/>
+      </record>
+
+
+</odoo>

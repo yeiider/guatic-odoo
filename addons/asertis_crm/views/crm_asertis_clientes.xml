@@ -1,0 +1,110 @@
+<odoo>
+
+    <!-- Vista de árbol -->
+    <record id="view_list_crm_asertis_clientes" model="ir.ui.view"> 
+        <field name="name">view.list.crm.asertis.clientes</field>
+        <field name="model">crm_asertis_clientes</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="nombre"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="responsable"/>
+                <field name="create_date" string="Creado el"/> 
+                <field name="create_uid" string="Creado por"/> 
+            </list>
+        </field>
+    </record>
+
+
+    <!-- Vista de formulario -->
+    <record model="ir.ui.view" id="view_form_crm_asertis_clientes">
+        <field name="name">view.form.crm.asertis.clientes</field>
+        <field name="model">crm_asertis_clientes</field>
+        <field name="arch" type="xml">
+            <form string="Partners">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button o_res_partner_tip_opp" type="object" name="ver_oportunidades" icon="fa-star">
+                            <field string="Oportunidades" name="oportunidades_count" widget="statinfo"/>
+                        </button>
+                    </div> 
+                    <field name="image_1920" widget="image" class="oe_avatar" options="{&quot;preview_image&quot;: &quot;image_1920&quot;}"/>
+                    <div class="oe_title mb26">
+                        <h1><field class="text-break" name="nombre" placeholder="Ej. John Doe"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="tipo_documento"/> 
+                            <field name="documento"/> 
+                            <field name="phone"/> 
+                            <field name="email"/> 
+                        </group>
+                        <group>
+                            <field name="direccion_1"/> 
+                            <field name="direccion_2"/> 
+                            <field name="ciudad"/> 
+                        </group>
+                    </group>  
+                    <notebook>
+                        <page string="Notas internas" name="notas_internas">
+                            <field name="descripcion" placeholder="Añade una descripción..."/>
+                        </page> 
+                        <page string="Info. comercial" name="info_comercial">
+                            <group string="Asesor responsable">
+                                <field name="responsable" widget="many2one_avatar_user"/>
+                            </group>
+                        </page> 
+                        <page string="Datos del registro" name="datos_registro">
+                            <group>
+                                <field name="create_date" string="Creado el"/>
+                                <field name="create_uid" string="Creado por"/>
+                                <field name="write_date" string="Actualizado el"/>
+                                <field name="write_uid" string="Actualizado por"/>
+                            </group>
+                        </page> 
+                    </notebook>
+                </sheet>
+                <chatter/>
+                <!-- <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids" options="{'post_refresh': 'recipients'}"/>
+                </div> -->
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Acción -->
+    <record id="action_crm_asertis_clientes" model="ir.actions.act_window"> 
+        <field name="name">Clientes</field>
+        <field name="res_model">crm_asertis_clientes</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+
+    <!-- Menuitem -->
+    <menuitem id="menu_crm_asertis_clientes" parent="menu_crm_asertis" name="Clientes" action="asertis_crm.action_crm_asertis_clientes"/>
+
+
+    <!-- Búsqueda -->
+    <record id="view_search_crm_asertis_clientes" model="ir.ui.view">
+        <field name="name">view.search.crm.asertis.clientes</field>
+        <field name="model">crm_asertis_clientes</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="nombre"/>
+                <field name="documento"/>
+                <field name="phone"/>
+                <filter string="Sin responsable" name="sin_responsable" domain="[('responsable', '=', False)]"/>
+                <group expand="1" string="Agrupar por">
+                    <filter string="Responsable" name="responsable" context="{'group_by': 'responsable'}"/>
+                </group> 
+            </search>
+        </field>
+    </record>
+
+
+
+</odoo>

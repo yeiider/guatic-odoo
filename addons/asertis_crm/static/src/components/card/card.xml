@@ -1,0 +1,17 @@
+<templates xml:space="preserve">
+    <t t-name="asertis_crm.Card" owl="1">
+        <div class="m-0 p-0 col">
+            <div class="m-0 p-1 cursor-pointer col" t-on-click="()=>props.onClick()">
+                <div t-attf-class="crm-mov-card #{ props.bg ? props.bg : 'crm-mov-blue-gradient' }">
+                    <span class="crm-mov-card-value">
+                        <span t-esc="props.value"/>
+                    </span>
+                    <span class="crm-mov-card-text">
+                        <span t-esc="props.name"/>
+                    </span>
+                    <i t-attf-class="fa #{ props.icon ? props.icon : 'fa-bar-chart' } crm-mov-icon"></i>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

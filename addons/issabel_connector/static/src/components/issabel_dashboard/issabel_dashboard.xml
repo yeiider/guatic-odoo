@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="issabel_dashboard.Template">
+        <div class="o_action_manager" style="padding: 20px; background: #f5f7fa;">
+            <!-- Loader -->
+            <div class="loader-overlay" t-if="state.isLoading">
+                <span class="loader"></span>
+            </div>
+
+            <!-- Encabezado con botón de refrescar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <div>
+                    <h2 style="font-size: 28px; font-weight: bold; color: #2563eb; margin: 0;">
+            📊 Panel Call Center en Tiempo Real
+                    </h2>
+                    <p style="font-size: 12px; color: #6b7280; margin: 4px 0 0 0;" t-if="state.lastUpdate">
+            Última actualización: <t t-esc="formatLastUpdate(state.lastUpdate)"/>
+                    </p>
+                </div>
+
+                <!-- Botón de refrescar solo con icono -->
+                <button class="btn-refresh-icon" t-on-click="refreshData" title="Refrescar datos" t-att-disabled="state.isLoading">
+                    <i class="fa fa-refresh" t-att-class="{'fa-spin': state.isLoading}"></i>
+                </button>
+            </div>
+            <!-- Grid de 2 columnas -->
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+
+                <!-- === AGENTES === -->
+                <div style="background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <h3 style="font-size: 18px; font-weight: 600; color: #374151; margin-bottom: 15px;">
+                        🎧 Agentes
+                    </h3>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                        <thead>
+                            <tr style="background: #f3f4f6;">
+                                <th style="padding: 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Nombre</th>
+                                <th style="padding: 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Cola</th>
+                                <th style="padding: 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Estado</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 2px solid #e5e7eb;">Pausa</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 2px solid #e5e7eb;">En llamada</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 2px solid #e5e7eb;">Llamadas</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 2px solid #e5e7eb;">Prioridad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.agents" t-as="a" t-key="a.agent + '_' + a.queue">
+                                <tr>
+                                    <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="a.name"/>
+                                    </td>
+                                    <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="a.queue"/>
+                                    </td>
+                                    <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">
+                                        <span t-att-class="
+                                            getStatusClass(a.status_code)
+                                        ">
+                                            <t t-esc="a.status"/>
+                                        </span>
+                                    </td>
+                                    <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="a.paused ? 'Sí' : 'No'"/>
+                                    </td>
+                                    <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="a.in_call ? 'Sí' : 'No'"/>
+                                    </td>
+                                    <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="a.calls_taken"/>
+                                    </td>
+                                    <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="a.penalty"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-if="!state.agents || state.agents.length === 0">
+                                <tr>
+                                    <td colspan="7" style="padding: 20px; text-align: center; color: #9ca3af;">
+                                        No hay agentes disponibles
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <!-- === LLAMADAS === -->
+                <div style="background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <h3 style="font-size: 18px; font-weight: 600; color: #374151; margin-bottom: 15px;">
+                        ☎️ Llamadas en Cola
+                    </h3>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                        <thead>
+                            <tr style="background: #f3f4f6;">
+                                <th style="padding: 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Caller ID</th>
+                                <th style="padding: 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Nombre</th>
+                                <th style="padding: 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Cola</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 2px solid #e5e7eb;">Pos.</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 2px solid #e5e7eb;">Espera (s)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.calls" t-as="c" t-key="c.unique_id">
+                                <tr>
+                                    <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="c.caller_id_num"/>
+                                    </td>
+                                    <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="c.caller_id_name || '-'"/>
+                                    </td>
+                                    <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="c.queue"/>
+                                    </td>
+                                    <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="c.position"/>
+                                    </td>
+                                    <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">
+                                        <span t-att-style="
+                                            (c.wait_time || 0) > 60 ? 'color: #dc2626; font-weight: 600;' :
+                                            (c.wait_time || 0) > 30 ? 'color: #ca8a04; font-weight: 600;' :
+                                            'color: #16a34a;'
+                                        ">
+                                            <t t-esc="c.wait_time || 0"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-if="!state.calls || state.calls.length === 0">
+                                <tr>
+                                    <td colspan="5" style="padding: 20px; text-align: center; color: #9ca3af;">
+                                        No hay llamadas en espera
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(1, 1fr); gap: 20px; margin-top: 20px;">
+                <!-- === ESTADÍSTICAS DE COLAS === -->
+                <div style="background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <h3 style="font-size: 18px; font-weight: 600; color: #374151; margin-bottom: 15px;">
+                        📈 Estadísticas de Colas
+                    </h3>
+
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                        <thead>
+                            <tr style="background: #f3f4f6;">
+                                <th style="padding: 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Cola</th>
+                                <th style="padding: 8px; text-align: left; border-bottom: 2px solid #e5e7eb;">Estrategia</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 2px solid #e5e7eb;">Esperando</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 2px solid #e5e7eb;">Completadas</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 2px solid #e5e7eb;">Abandonadas</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 2px solid #e5e7eb;">SLA (%)</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 2px solid #e5e7eb;">Espera Prom. (s)</th>
+                                <th style="padding: 8px; text-align: center; border-bottom: 2px solid #e5e7eb;">Tiempo Conversación (s)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.queues" t-as="q" t-key="q.queue">
+                                <tr>
+                                    <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="q.queue"/>
+                                    </td>
+                                    <td style="padding: 8px; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="q.strategy"/>
+                                    </td>
+                                    <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="q.calls || 0"/>
+                                    </td>
+                                    <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="q.completed || 0"/>
+                                    </td>
+                                    <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="q.abandoned || 0"/>
+                                    </td>
+                                    <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">
+                                        <span t-att-style="
+                                            (q.service_level || 0) >= 80
+                                            ? 'color: #16a34a; font-weight: 600;'
+                                            : 'color: #dc2626; font-weight: 600;'
+                                        ">
+                                            <t t-esc="(q.service_level || 0)"/>
+%
+                                        </span>
+                                    </td>
+                                    <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="q.holdtime || 0"/>
+                                    </td>
+                                    <td style="padding: 8px; text-align: center; border-bottom: 1px solid #e5e7eb;">
+                                        <t t-esc="q.talk_time || 0"/>
+                                    </td>
+                                </tr>
+                            </t>
+
+                            <t t-if="!state.queues || state.queues.length === 0">
+                                <tr>
+                                    <td colspan="8" style="padding: 20px; text-align: center; color: #9ca3af;">
+                                        No hay estadísticas disponibles
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- Vista tipo árbol (lista) con botón en barra -->
+        <record id="view_provider_skill_list" model="ir.ui.view">
+            <field name="name">provider.skill.list</field>
+            <field name="model">provider.skill</field>
+            <field name="arch" type="xml">
+                <list string="Gestión de Habilidades">
+
+                    <field name="name" />
+                    <field name="code" />
+                    <field name="description" />
+                    <field name="provider_id" />
+                    <field name="active" />
+                    <field name="priority" />
+                </list>
+            </field>
+        </record>
+
+        <!-- Vista tipo formulario -->
+        <record id="view_provider_skill_form" model="ir.ui.view">
+            <field name="name">provider.skill.form</field>
+            <field name="model">provider.skill</field>
+            <field name="arch" type="xml">
+                <form string="Habilidad del Proveedor">
+
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="code" />
+                            <field name="description" />
+                            <field name="active" />
+                        </group>
+                        <group>
+                            <field name="provider_id" />
+                            <field name="priority" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista de búsqueda (filtros) -->
+        <record id="view_provider_skill_search" model="ir.ui.view">
+            <field name="name">provider.skill.search</field>
+            <field name="model">provider.skill</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Habilidades">
+                    <field name="name" />
+                    <filter name="filter_active" string="Activas" domain="[('active','=',True)]" />
+                    <filter name="filter_inactive" string="Inactivas"
+                        domain="[('active','=',False)]" />
+                    <group expand="0" string="Agrupar por">
+                        <filter name="group_by_provider" string="Proveedor"
+                            context="{'group_by': 'provider_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción principal -->
+        <record id="action_provider_skill" model="ir.actions.act_window">
+            <field name="name">Gestión de Habilidades</field>
+            <field name="res_model">provider.skill</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_provider_skill_search" />
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Configura las habilidades de los proveedores que deseas usar.
+                </p>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

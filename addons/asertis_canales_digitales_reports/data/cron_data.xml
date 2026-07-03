@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+
+        <!-- Cron job para sincronización automática cada hora -->
+        <record id="sync_api_reports_cron" model="ir.cron">
+            <field name="name">Sincronizar Reportes API</field>
+            <field name="model_id" ref="model_api_report" />
+            <field name="state">code</field>
+            <field name="code">model.sync_reports()</field>
+            <field name="interval_number">12</field>
+            <field name="interval_type">hours</field>
+            <field name="active">True</field>
+            <field name="user_id" ref="base.user_root" />
+        </record>
+
+        <!-- Cron job para limpiar reportes antiguos (más de 30 días) -->
+        <record id="cleanup_old_reports_cron" model="ir.cron">
+            <field name="name">Limpiar Reportes Antiguos</field>
+            <field name="model_id" ref="model_api_report" />
+            <field name="state">code</field>
+            <field name="code">model.clean_old_reports()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+            <field name="user_id" ref="base.user_root" />
+        </record>
+
+        <!-- Cron job para renovar tokens automáticamente -->
+        <record id="refresh_tokens_cron" model="ir.cron">
+            <field name="name">Renovar Tokens API</field>
+            <field name="model_id" ref="model_api_config" />
+            <field name="state">code</field>
+            <field name="code">model.remove_token_api()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+            <field name="user_id" ref="base.user_root" />
+        </record>
+    </data>
+</odoo>

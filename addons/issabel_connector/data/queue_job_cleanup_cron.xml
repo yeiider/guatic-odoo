@@ -1,0 +1,13 @@
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_clean_ami_queue_jobs" model="ir.cron">
+            <field name="name">Limpieza Queue Jobs AMI</field>
+            <field name="model_id" ref="model_issabel_event_processor"/>
+            <field name="state">code</field>
+            <field name="code">model.clean_ami_queue_jobs()</field>
+            <field name="interval_number">3</field>
+            <field name="interval_type">hours</field>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

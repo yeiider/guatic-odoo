@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Heredar la vista de lista de oportunidades para agregar el botón WhatsApp -->
+    <record id="crm_lead_view_tree_inherit_whatsapp_template" model="ir.ui.view">
+        <field name="name">crm.lead.view.tree.inherit.whatsapp.template</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_oppor" />
+        <field name="arch" type="xml">
+            <!-- Agregar el botón WhatsApp en el header de la lista -->
+            <xpath expr="//list" position="inside">
+                <header>
+                    <button name="%(action_whatsapp_asertis_template_multi_send_wizard)d"
+                        type="action"
+                        string="WhatsApp"
+                        icon="fa-whatsapp"
+                        class="btn-primary" />
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

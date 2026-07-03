@@ -1,0 +1,14 @@
+<odoo>
+    <template id="channel_created_template" name="Canal e hilo actualizados">
+        <t t-call="website.layout">
+            <div class="container">
+                <h2>✅ Canal: <t t-esc="channel.name"/></h2>
+                <p>Hilo actualizado o creado:</p>
+                <ul>
+                    <li><strong>Thread:</strong> <t t-esc="thread_name"/></li>
+                    <li><strong>Mensaje enviado:</strong> <t t-esc="message"/></li>
+                </ul>
+            </div>
+        </t>
+    </template>
+</odoo>

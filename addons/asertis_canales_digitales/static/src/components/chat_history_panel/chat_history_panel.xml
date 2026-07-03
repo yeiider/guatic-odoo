@@ -1,0 +1,70 @@
+<templates xml:space="preserve">
+    <t t-name="discuss.ChatHistoryPanel" owl="1">
+        <ActionPanel title.translate="Historial del Chat" minWidth="200" initialWidth="400" icon="'fa fa-history'">
+            <!-- Content -->
+            <div class="o-mail-ChatHistoryPanel-content flex-grow-1 d-flex flex-column">
+
+                <!-- Loading State -->
+                <div t-if="state.isLoading" 
+                     class="o-mail-ChatHistoryPanel-loading d-flex flex-column align-items-center justify-content-center flex-grow-1">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                    </div>
+                    <div class="text-muted">Cargando historial del chat...</div>
+                </div>
+
+                <!-- Error State -->
+                <div t-elif="state.error" 
+                     class="o-mail-ChatHistoryPanel-error d-flex flex-column align-items-center justify-content-center flex-grow-1 p-4">
+                    <i class="fa fa-exclamation-triangle text-warning mb-3" style="font-size: 2rem;"/>
+                    <div class="text-center">
+                        <div class="fw-medium mb-2">Sin Historial Disponible</div>
+                        <div class="text-muted small">
+                            No se pudo cargar el historial de chat. Esto puede deberse a:
+                            <ul class="list-unstyled mt-2">
+                                <li>• No existen mensajes previos</li>
+                                <li>• El servicio externo no está disponible</li>
+                                <li>• Problemas de conexión de red</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Messages -->
+                <div t-else="" class="o-mail-ChatHistoryPanel-messages flex-grow-1 p-3" style="overflow-y: auto;">
+                    <div t-if="!hasMessages" 
+                         class="o-mail-ChatHistoryPanel-empty d-flex flex-column align-items-center justify-content-center h-100">
+                        <i class="fa fa-comments-o text-muted mb-3" style="font-size: 3rem; opacity: 0.3;"/>
+                        <div class="text-muted text-center">
+                            <div class="fw-medium">No hay mensajes en el historial</div>
+                            <div class="small mt-1">Las conversaciones anteriores aparecerán aquí</div>
+                        </div>
+                    </div>
+                    
+                    <div t-else="">
+                        <HistoryMessage t-foreach="state.messages" 
+                                      t-as="message" 
+                                      t-key="message.id"
+                                      message="message"
+                                      chatHistoryService="chatHistoryService"/>
+                    </div>
+                </div>
+
+                <!-- Footer with sync info -->
+                <div t-if="showLastSyncInfo" 
+                     class="o-mail-ChatHistoryPanel-footer p-2 border-top bg-light">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <small class="text-muted">
+                            <i class="fa fa-clock-o me-1"/>
+                            Última sincronización: <t t-esc="lastSyncFormatted"/>
+                        </small>
+                        <small t-if="state.hasMore" class="text-info">
+                            <i class="fa fa-info-circle me-1"/>
+                            Más mensajes disponibles
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </ActionPanel>
+    </t>
+</templates>

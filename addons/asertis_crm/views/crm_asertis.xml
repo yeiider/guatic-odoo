@@ -1,0 +1,204 @@
+<odoo>
+
+    <!-- Vista de árbol -->
+    <record id="view_tree_crm_asertis" model="ir.ui.view"> 
+        <field name="name">view.tree.crm.asertis</field>
+        <field name="model">crm_asertis</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="area"/>
+                <field name="cliente"/>
+                <field name="name"/>
+                <field name="estado_id"/>
+                <field name="prioridad" optional="hide" widget="priority"/>
+                <field name="create_date" string="Creado el"/> 
+                <field name="create_uid" string="Creado por"/> 
+            </list>
+        </field>
+    </record>
+
+
+    <!-- Vista de actividad -->
+    <record id="view_activity_crm_asertis" model="ir.ui.view">
+        <field name="name">view.activity.crm.asertis</field>
+        <field name="model">crm_asertis</field>
+        <field name="arch" type="xml">
+            <activity string="Actividades">
+                <field name="id"/>
+                <field name="create_uid"/>
+                <templates>
+                    <div t-name="activity-box">
+                        <field name="create_uid" widget="many2one_avatar_user"/>
+                        <div>
+                            <field name="name" display="full"/>
+                            <field name="venta_proyectada" widget="monetary" display="full" muted="1"/>
+                        </div>
+                    </div>
+                </templates>
+            </activity>
+        </field>
+    </record>
+
+
+    <!-- Vista de formulario -->
+    <record model="ir.ui.view" id="view_form_crm_asertis">
+        <field name="name">view.form.crm.asertis</field>
+        <field name="model">crm_asertis</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_abrir_wizard_actividad" string="Registrar Actividad" type="object" class="oe_highlight"
+                         invisible="estado_ganado or estado_perdido"/>
+                    <button name="establecer_ganado" string="Ganado" type="object" class="oe_highlight"
+                         invisible="estado_ganado or estado_perdido"/>
+                    <button name="establecer_perdido" string="Perdido" type="object" class="btn btn-secundary"
+                         invisible="estado_ganado or estado_perdido"/>
+                    <field name="estado_id" widget="statusbar" class="o_field_statusbar" 
+                        options="{'clickable': '1', 'fold_field': 'fold'}"/>
+                </header>
+                <sheet> 
+                    <field name="estado_ganado" invisible="1"/>
+                    <field name="estado_perdido" invisible="1"/>
+
+                    <widget name="web_ribbon" title="Ganado" bg_color="bg-success"  invisible="not estado_ganado"/>
+                    <widget name="web_ribbon" title="Perdido" bg_color="bg-danger" invisible="not estado_perdido" />
+                    <div class="oe_title">
+                        <h1><field class="text-break" name="name" placeholder="Ej. Oportunidad de venta"/></h1>
+                        <h2 class="d-flex gap-2 g-0 align-items-end pb-3">
+                            <div>
+                                <label for="venta_proyectada" class="oe_edit_only pb-1"/>
+                                <div class="d-flex align-items-end">
+                                    <span>$ <field name="venta_proyectada" class="oe_inline o_input_13ch" widget='monetary'/></span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-end ps-2">
+                                <span class="oe_grey p-2"> en </span>
+                            </div>
+                            <div>
+                                <div id="probabilidad" class="d-flex align-items-baseline">
+                                    <field name="probabilidad" widget="float" class="oe_inline o_input_6ch"/>
+                                    <span class="oe_grey"> %</span>
+                                </div>
+                            </div>
+                        </h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="cliente"/> 
+                            <field name="cliente_correo"/> 
+                            <field name="telefono"/> 
+                        </group>
+                        <group>
+                            <field name="responsable" widget="many2one_avatar_user"/> 
+                            <label for="fecha_cierre" string="Fecha de cierre"/>
+                            <div class="o_lead_opportunity_form_inline_fields">
+                                <field name="fecha_cierre" nolabel="1" class="oe_inline"/>
+                                <field name="prioridad" widget="priority" nolabel="1" class="oe_inline align-top"/>
+                            </div>
+                            <field name="servicios" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': False}"/>
+                        </group>
+                    </group>  
+                    <notebook>
+                        <page string="Notas internas" name="notas_internas">
+                            <field name="descripcion" placeholder="Añade una descripción..."/>
+                        </page> 
+                        <page string="Actividades" name="actividades">
+                            <field name="actividades_ids">
+                                <list>
+                                    <field name="fecha"/>
+                                    <field name="actividad"/>
+                                    <field name="descripcion"/>
+                                    <field name="create_uid"/>
+                                </list>
+                            </field>
+                            <!-- <field name="actividades_ids" widget="timeline_one2many"/> -->
+                        </page> 
+                        <page string="Datos del registro" name="datos_registro">
+                            <group>
+                                <field name="create_date" string="Creado el"/>
+                                <field name="create_uid" string="Creado por"/>
+                                <field name="write_date" string="Actualizado el"/>
+                                <field name="write_uid" string="Actualizado por"/>
+                            </group>
+                        </page> 
+                    </notebook>
+                </sheet>  
+                <chatter/>        
+            </form>
+        </field>
+    </record>
+
+
+    <!-- Vista Kanban -->
+    <record id="view_kanban_crm_asertis" model="ir.ui.view">
+        <field name="name">view.kanban.crm.asertis</field>
+        <field name="model">crm_asertis</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="estado_id" sample="1">
+                <progressbar field="probabilidad" colors='{"50": "success", "30": "warning", "20": "danger"}'/>
+                <field name="estado_id"/>
+                <field name="venta_proyectada"/>
+                <field name="responsable"/>
+                <field name="prioridad"/>
+                <field name="servicios"/>
+                <field name="cliente"/>
+                <field name="estado_ganado"/>
+                <field name="estado_perdido"/>
+                <field name="probabilidad"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_card_ribbon oe_kanban_global_click oe_kanban_card d-flex flex-column">
+                            <div class="ribbon ribbon-top-right" invisible="not estado_ganado">
+                                <span class="bg-success">Ganado</span>
+                            </div>
+                            <div class="ribbon ribbon-top-right" invisible="not estado_perdido">
+                                <span class="bg-danger">Perdido</span>
+                            </div>
+                            <div class="oe_kanban_content flex-grow-1">
+                                <div class="o_kanban_record_title oe_kanban_details">
+                                    <strong><field name="name"/></strong>
+                                </div>
+                                <div class="o_kanban_record_subtitle">
+                                    <t t-if="record.venta_proyectada.raw_value">
+                                        $ <field name="venta_proyectada" widget="monetary"/>
+                                    </t>
+                                </div>
+                                <div>
+                                    <span class="o_text_overflow" t-if="record.cliente.value" t-esc="record.cliente.value"></span>
+                                </div>
+                                <div>
+                                    <field name="servicios" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                </div>
+                            </div>
+                            <div class="oe_kanban_footer">
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="prioridad" widget="priority"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="responsable" widget="many2one_avatar_user"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+
+    <!-- Acción -->
+    <record id="action_crm_asertis" model="ir.actions.act_window"> 
+        <field name="name">CRM Asertis</field>
+        <field name="res_model">crm_asertis</field>
+        <field name="view_mode">kanban,list,form,activity</field>
+    </record>
+
+
+    <!-- Menuitem -->
+    <menuitem id="menu_crm_asertis" parent="" name="CRM Asertis" action="asertis_crm.action_crm_asertis"/>
+
+
+
+</odoo>

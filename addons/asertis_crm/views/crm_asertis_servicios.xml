@@ -1,0 +1,35 @@
+<odoo>
+
+    <!-- Vista de árbol -->
+    <record id="view_tree_crm_asertis_servicios" model="ir.ui.view"> 
+        <field name="name">view.tree.crm.asertis.servicios</field>
+        <field name="model">crm_asertis_servicios</field>
+        <field name="arch" type="xml">
+            <list editable="top">
+                <field name="nombre"/>
+                <field name="color" widget="color_picker"/>
+                <field name="create_date" string="Creado el"/> 
+                <field name="create_uid" string="Creado por"/> 
+            </list>
+        </field>
+    </record>
+
+
+    <!-- Acción -->
+    <record id="action_crm_asertis_servicios" model="ir.actions.act_window"> 
+        <field name="name">Servicios</field>
+        <field name="res_model">crm_asertis_servicios</field>
+        <field name="view_mode">list</field>
+    </record>
+
+
+    <!-- Menuitem -->
+    <menuitem id="menu_crm_asertis_servicios_p" parent="menu_crm_asertis_config" name="Ajustes CRM"/>
+
+
+    <!-- Submenuitem -->
+    <menuitem id="menu_crm_asertis_servicios" parent="menu_crm_asertis_servicios_p" name="Servicios" action="asertis_crm.action_crm_asertis_servicios"/>
+
+
+
+</odoo>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- 🔹 Acción cliente para el dashboard OWL -->
+        <record id="action_issabel_dashboard" model="ir.actions.client">
+            <field name="name">Panel Call Center</field>
+            <field name="tag">issabel_dashboard</field>
+        </record>
+
+        <!-- 🔹 Menú principal del conector Issabel -->
+        <menuitem
+            id="menu_issabel_root"
+            name="Issabel Connector"
+            sequence="200"
+            web_icon="issabel_connector,static/description/icon.png"
+        />
+
+        <!-- ========== ESTADÍSTICAS EN TIEMPO REAL ========== -->
+        <menuitem
+            id="menu_issabel_realtime"
+            name="📊 Tiempo Real"
+            parent="menu_issabel_root"
+            sequence="1"
+        />
+
+        <!-- 👇 Aquí insertas el nuevo dashboard -->
+        <menuitem
+            id="menu_issabel_dashboard"
+            name="Panel en Tiempo Real"
+            parent="menu_issabel_realtime"
+            action="action_issabel_dashboard"
+            sequence="0"
+        />
+
+
+        <menuitem id="menu_issabel_voip_call_view"
+            name="Voip / Llamadas"
+            parent="menu_issabel_root"
+            action="issabel_voip_call_view"
+            sequence="2"
+        />
+        <!-- ========== CONFIGURACIÓN ========== -->
+        <menuitem
+            id="menu_issabel_config"
+            name="⚙️ Configuración"
+            parent="menu_issabel_root"
+            action="action_issabel_config"
+            sequence="99"
+        />
+    </data>
+</odoo>

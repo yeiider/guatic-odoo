@@ -1,0 +1,39 @@
+<odoo>
+
+    <!-- ####################
+    #                       #
+    #         GRUPOS        #
+    #                       #
+    #######################-->
+
+
+    <!-- categorías -->
+    <record id="module_category_crm_asertis" model="ir.module.category">
+        <field name="name">CRM Asertis</field>
+        <field name="description">Categoría para grupos del CRM Asertis</field>
+    </record>
+
+    <!-- grupos -->
+
+    <!-- Asesor -->
+    <record id="group_crm_asertis_asesor" model="res.groups">
+        <field name="name">Asesor</field>
+        <field name="category_id" ref="module_category_crm_asertis"/> <!-- asigna al grupo una categoría -->
+    </record>
+
+
+    <record id="crm_asertis_rule_asesor_area" model="ir.rule">
+        <field name="name">Regla por área para Asesores</field>
+        <field name="model_id" ref="asertis_crm.model_crm_asertis"/> <!-- Reemplaza module_name -->
+        <field name="domain_force">[('area', '=', user.area)]</field>
+        <field name="groups" eval="[(4, ref('asertis_crm.group_crm_asertis_asesor'))]"/> <!-- Reemplaza module_name -->
+    </record>
+    
+    <record id="crm_asertis_rule_asesor_area_clientes" model="ir.rule">
+        <field name="name">Regla por área para Asesores, clientes</field>
+        <field name="model_id" ref="asertis_crm.model_crm_asertis_clientes"/> <!-- Reemplaza module_name -->
+        <field name="domain_force">[('area', '=', user.area)]</field>
+        <field name="groups" eval="[(4, ref('asertis_crm.group_crm_asertis_asesor'))]"/> <!-- Reemplaza module_name -->
+    </record>
+
+</odoo>

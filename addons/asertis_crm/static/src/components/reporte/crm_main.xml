@@ -1,0 +1,17 @@
+<templates xml:space="preserve">
+    <t t-name="asertis_crm.CrmMain" owl="1">
+        <div class="h-100 overflow-auto bg-muted">
+            <div class="row m-1">
+                <div class="col-lg-12">
+
+                    <div class="row">
+                        <Card name="'Oportunidades'" value="state.totalOportunidades" icon="'fa-suitcase'"/>
+                        <Card name="'Cerradas'" value="state.totalCerradas" icon="'fa-info-circle'"/>
+                        <Card name="'Clientes'" value="state.totalClientes" icon="'fa-user-circle'"/>
+                        <!-- <Card onClick.bind="irRegistros" name="'Registros'" value="state.totalRegistros" icon="'fa-suitcase'"/> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

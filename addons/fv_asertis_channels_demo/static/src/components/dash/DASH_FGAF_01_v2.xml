@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="owl.OwlFactDashboard" owl="1">
+        <style>
+           .iframe-wrapper {
+                width: 100%;
+                height: 100vh; /* ocupa todo el alto de la pantalla */
+                overflow: hidden;
+            }
+
+            .iframe-full {
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
+        </style>
+        
+         <div class="iframe-wrapper">
+
+            <iframe  class="iframe-full" t-att-src="state.iframeUrl"  frameborder="0" allow="fullscreen"></iframe>
+
+
+        </div>
+    </t>
+</templates>

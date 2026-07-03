@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_whatsapp_asertis_template_send_wizard" model="ir.ui.view">
+        <field name="name">whatsapp.asertis.template.send.wizard.form.simple</field>
+        <field name="model">whatsapp.asertis.template.send.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Enviar Plantilla WhatsApp">
+                <!-- Campos ocultos -->
+                <group invisible="1">
+                    <field name="model" />
+                    <field name="model_id" />
+                    <field name="record_id" />
+                </group>
+
+                <sheet>
+                    <!-- Selección de plantilla -->
+                    <group string="Seleccionar Plantilla">
+                        <field name="template_id"
+                            domain="[('model_id', '=', model_id), ('active', '=', True)]"
+                            options="{'no_create': True, 'no_create_edit': True}"
+                            placeholder="Seleccione una plantilla..." />
+                    </group>
+
+                    <!-- Parámetros -->
+                    <div invisible="template_id==False">
+                        <h3>Parámetros de la Plantilla</h3>
+                        
+                        <!-- Alerta informativa PRIMERO -->
+                        <div class="alert alert-info" role="alert">
+                            Los valores se cargan automáticamente. Puede modificarlos antes de
+                            enviar.
+                        </div>
+
+                    
+                        <group>
+                            <field name="param_line_ids" nolabel="1">
+                                <list string="Parámetros" editable="bottom" create="false" delete="false">
+                                    <field name="param_sequence" string="Orden" width="60px" />
+                                    <field name="param_name" string="Parámetro" readonly="1" />
+                                    <field name="param_value" string="Valor" />
+                                    <field name="param_id" column_invisible="1" />
+                                </list>
+                            </field>
+                        </group>
+                    </div>
+
+                    <!-- Vista previa -->
+                    <group string="Vista Previa del Mensaje"
+                        invisible="template_id==False">
+                        <field name="preview_text"
+                            nolabel="1"
+                            readonly="1"
+                            widget="html" />
+                    </group>
+                </sheet>
+
+                <footer>
+                    <button string="Enviar WhatsApp"
+                        type="object"
+                        name="action_send_template"
+                        class="btn-primary"
+                        invisible="template_id==False" />
+                    <!-- <button string="Recargar Parámetros"
+                        type="object"
+                        name="action_reload_params"
+                        class="btn-secondary"
+                        invisible="template_id==False" /> -->
+                    <button string="Cancelar" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Acción del wizard actualizada -->
+    <record id="action_whatsapp_asertis_template_send_wizard" model="ir.actions.act_window">
+        <field name="name">Enviar Plantilla WhatsApp</field>
+        <field name="res_model">whatsapp.asertis.template.send.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_whatsapp_asertis_template_send_wizard" />
+        <field name="target">new</field>
+    </record>
+
+</odoo>

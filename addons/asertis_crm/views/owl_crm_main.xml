@@ -1,0 +1,10 @@
+<odoo>
+    
+    <record id="action_crm_main" model="ir.actions.client"> 
+        <field name="name">Reportes</field>
+        <field name="tag">asertis_crm.crm_main</field>
+    </record>
+
+    <menuitem id="menu_crm_main" parent="" action="asertis_crm.action_crm_main" />
+
+</odoo>

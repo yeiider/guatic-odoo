@@ -1,0 +1,44 @@
+<odoo>
+    <data>
+
+        <!-- Menú raíz -->
+        <menuitem id="menu_chat_root"
+            name="Asertis Canales Digitales"
+            sequence="1"
+            web_icon="asertis_canales_digitales,static/description/icon.png"
+        />
+
+
+        <!-- Submenús principales -->
+        <menuitem id="menu_chat_provider"
+            name="Proveedores de Chat"
+            parent="menu_chat_root"
+            action="action_chat_provider"
+            sequence="2" />
+
+        <menuitem id="menu_provider_skill"
+            name="Gestión de Habilidades"
+            parent="menu_chat_root"
+            action="action_provider_skill"
+            sequence="3" />
+
+        <!--  Submenú dentro de Gestión de Habilidades -->
+
+        <menuitem id="menu_provider_skill_views"
+            name="🛠️ Habilidades del Proveedor"
+            parent="menu_provider_skill"
+            action="action_provider_skill"
+            sequence="4" />
+        <menuitem id="menu_import_provider_skills"
+            name="📥 Importar Excel"
+            parent="menu_provider_skill"
+            action="action_open_import_wizard_direct"
+            sequence="5" />
+        <menuitem id="menu_assign_skills_to_persons"
+            name="📝 Asignar Habilidades"
+            parent="menu_provider_skill"
+            action="action_assign_skills_to_persons"
+            sequence="6" />
+
+    </data>
+</odoo>

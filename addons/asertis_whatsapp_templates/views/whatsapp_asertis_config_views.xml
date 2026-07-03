@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <!-- Vista de lista de configuraciones -->
+        <record id="view_whatsapp_config_list" model="ir.ui.view">
+            <field name="name">whatsapp.config.list</field>
+            <field name="model">whatsapp.asertis.config</field>
+            <field name="arch" type="xml">
+                <list string="Configuraciones WhatsApp" decoration-info="is_default"
+                    decoration-muted="not active">
+                    <field name="name" />
+                    <field name="api_url" />
+                    <field name="is_default" widget="boolean_toggle" />
+                    <field name="active" widget="boolean_toggle" />
+                    <field name="total_messages_sent" />
+                    <field name="success_rate" widget="percentage" />
+                    <field name="last_test_date" />
+                    <field name="last_test_result"
+                        decoration-success="last_test_result == 'success'"
+                        decoration-danger="last_test_result == 'failed'"
+                        decoration-warning="last_test_result == 'pending'" />
+                    <field name="company_id" groups="base.group_multi_company" />
+                    <button name="action_test_connection" type="object"
+                        icon="fa-plug" title="Probar Conexión" />
+                </list>
+            </field>
+        </record>
+
+        <!-- Vista de formulario de configuración -->
+        <record id="view_whatsapp_config_form" model="ir.ui.view">
+            <field name="name">whatsapp.config.form</field>
+            <field name="model">whatsapp.asertis.config</field>
+            <field name="arch" type="xml">
+                <form string="Configuración WhatsApp">
+                    <header>
+                        <button name="action_test_connection" string="🔌 Probar Conexión"
+                            type="object" class="btn-primary" />
+                        <button name="action_set_as_default"
+                            string="⭐ Establecer como Predeterminada"
+                            type="object" class="btn-secondary"
+                            invisible="[('is_default', '=', True)]" />
+                        <button name="action_duplicate_config" string="📋 Duplicar"
+                            type="object" class="btn-secondary" />
+                        <field name="active" widget="boolean_button"
+                            options="{'terminology': {'string_true': 'Activa', 'hover_true': 'Desactivar', 'string_false': 'Inactiva', 'hover_false': 'Activar'}}" />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="get_templates_using_config" type="object"
+                                class="oe_stat_button" icon="fa-file-text-o">
+                                <field name="total_messages_sent" widget="statinfo"
+                                    string="Mensajes Enviados" />
+                            </button>
+                            <button class="oe_stat_button" icon="fa-percent">
+                                <field name="success_rate" widget="statinfo" string="Tasa de Éxito" />
+                            </button>
+                        </div>
+
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" />
+                            <h1>
+                                <field name="name" placeholder="Nombre de la configuración..." />
+                            </h1>
+                            <div invisible="[('is_default', '=', False)]">
+                                <span class="badge badge-info">⭐ Configuración Predeterminada</span>
+                            </div>
+                        </div>
+
+                        <group>
+                            <group name="api_config" string="Configuración de API">
+                                <field name="api_url" />
+                                <field name="timeout" />
+                                <field name="retry_attempts" />
+                                <field name="retry_delay" />
+                            </group>
+                            <group name="default_values" string="Valores Predeterminados">
+                                <field name="bot_id" />
+                                <field name="platform_id" />
+                                <field name="default_country_code" />
+                                <field name="company_id" groups="base.group_multi_company" />
+                            </group>
+                        </group>
+
+                        <group name="advanced_config" string="Configuración Avanzada">
+                            <field name="api_headers" widget="ace" options="{'mode': 'json'}" />
+                        </group>
+
+                        <group>
+                            <group name="phone_config" string="Configuración de Teléfonos">
+                                <field name="phone_validation" />
+                            </group>
+                            <group name="logging_config" string="Configuración de Logging">
+                                <field name="enable_logging" />
+                                <field name="log_requests" />
+                                <field name="log_responses" />
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Pruebas de Conexión" name="testing">
+                                <group>
+                                    <group name="test_config" string="Configuración de Prueba">
+                                        <field name="test_phone" />
+                                    </group>
+                                    <group name="test_results" string="Resultados de Prueba">
+                                        <field name="last_test_date" readonly="1" />
+                                        <field name="last_test_result" readonly="1"
+                                            decoration-success="last_test_result == 'success'"
+                                            decoration-danger="last_test_result == 'failed'"
+                                            decoration-warning="last_test_result == 'pending'" />
+                                    </group>
+                                </group>
+                                <group name="test_message_group">
+                                    <field name="test_message" readonly="1" widget="text" />
+                                </group>
+                                <div class="oe_clear">
+                                    <button name="action_test_connection"
+                                        string="🔌 Ejecutar Prueba"
+                                        type="object" class="btn-primary" />
+                                </div>
+                            </page>
+
+                            <page string="Plantillas Asociadas" name="templates">
+                                <div class="oe_clear">
+                                    <button name="get_templates_using_config"
+                                        string="📋 Ver Plantillas que Usan esta Configuración"
+                                        type="object" class="btn-primary" />
+                                </div>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter>
+                        <field name="total_messages_sent" widget="mail_followers" />
+
+                    </chatter>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista de búsqueda de configuraciones -->
+        <record id="view_whatsapp_config_search" model="ir.ui.view">
+            <field name="name">whatsapp.config.search</field>
+            <field name="model">whatsapp.asertis.config</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Configuraciones">
+                    <field name="name" string="Nombre" />
+                    <field name="api_url" string="URL API" />
+
+                    <filter string="Activas" name="active" domain="[('active', '=', True)]" />
+                    <filter string="Inactivas" name="inactive" domain="[('active', '=', False)]" />
+                    <filter string="Predeterminadas" name="default"
+                        domain="[('is_default', '=', True)]" />
+
+                    <separator />
+                    <filter string="Probadas Exitosamente" name="test_success"
+                        domain="[('last_test_result', '=', 'success')]" />
+                    <filter string="Con Errores de Prueba" name="test_failed"
+                        domain="[('last_test_result', '=', 'failed')]" />
+
+                    <separator />
+                    <filter string="Con Mensajes Enviados" name="with_messages"
+                        domain="[('total_messages_sent', '>', 0)]" />
+
+                    <group expand="1" string="Agrupar Por">
+                        <filter string="Estado" name="group_active" context="{'group_by': 'active'}" />
+                        <filter string="Resultado Prueba" name="group_test_result"
+                            context="{'group_by': 'last_test_result'}" />
+                        <filter string="Compañía" name="group_company"
+                            context="{'group_by': 'company_id'}" groups="base.group_multi_company" />
+                    </group>
+                </search>
+            </field>
+        </record>
+        <!-- Acción para abrir vista de configuración -->
+        <record id="action_whatsapp_asertis_config" model="ir.actions.act_window">
+            <field name="name">Configuraciones WhatsApp</field>
+            <field name="res_model">whatsapp.asertis.config</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crea y gestiona las configuraciones de conexión a la API de WhatsApp.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,6 @@
+<odoo>
+
+    <!-- Menuitem padre para configuración-->
+    <menuitem id="menu_crm_asertis_config" parent="menu_crm_asertis" name="Configuración"/>
+
+</odoo>

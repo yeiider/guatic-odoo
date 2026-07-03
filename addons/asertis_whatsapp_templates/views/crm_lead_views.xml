@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extensión de la vista de formulario de CRM Lead -->
+    <record id="view_crm_lead_form_whatsapp" model="ir.ui.view">
+        <field name="name">crm.lead.form.whatsapp</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Agregar botón WhatsApp junto al botón de actividades -->
+            <button name="action_set_won_rainbowman" position="after">
+                <button name="action_send_whatsapp" type="object" 
+                        class="btn-primary" string="📱 WhatsApp"
+                        invisible="['|', ('whatsapp_opt_out', '=', True), ('has_whatsapp_phone', '=', False)]"
+                        title="Enviar mensaje WhatsApp"/>
+
+            </button>
+
+            <!-- Agregar información de WhatsApp en el botón box -->
+            <div name="button_box" position="inside">
+                <button name="action_view_whatsapp_history" type="object" 
+                        class="oe_stat_button" icon="fa-whatsapp"
+                        invisible="['whatsapp_count', '=', 0]">
+                    <field name="whatsapp_count" widget="statinfo" string="Mensajes WhatsApp"/>
+                </button>
+            </div>
+
+            <!-- Agregar campos de WhatsApp en el formulario -->
+            <field name="phone" position="after">
+                <field name="whatsapp_phone" readonly="1"/>
+                <field name="has_whatsapp_phone" invisible="1"/>
+                <field name="whatsapp_opt_out" string="🚫 Sin WhatsApp"/>
+            </field>
+
+            <!-- Agregar pestaña de WhatsApp -->
+            <xpath expr="//notebook" position="inside">
+                <page string="WhatsApp" name="whatsapp" 
+                      invisible="['whatsapp_count', '=', 0]">
+                    <group>
+                        <group name="whatsapp_info" string="Información WhatsApp">
+                            <field name="last_whatsapp_sent" readonly="1"/>
+                            <field name="whatsapp_count" readonly="1"/>
+                            <field name="preferred_phone_type"/>
+                        </group>
+                        <group name="whatsapp_actions" string="Acciones">
+                            <button name="action_send_whatsapp" type="object" 
+                                    string="📱 Enviar WhatsApp" class="btn-primary"
+                                    invisible="['|', ('whatsapp_opt_out', '=', True), ('has_whatsapp_phone', '=', False)]"/>
+                            <button name="action_toggle_whatsapp_opt_out" type="object" 
+                                    string="🔄 Cambiar Estado WhatsApp" class="btn-secondary"/>
+                        </group>
+                    </group>
+                    <field name="whatsapp_log_ids" readonly="1">
+                        <list string="Historial WhatsApp" create="false" edit="false">
+                            <field name="sent_date"/>
+                            <field name="template_name"/>
+                            <field name="phone"/>
+                            <field name="status" decoration-success="status == 'sent'" 
+                                   decoration-danger="status == 'failed'"/>
+                            <field name="user_id"/>
+                            <button name="action_retry_send" type="object" 
+                                    icon="fa-refresh" title="Reintentar"
+                                    invisible="['|', ('status', '=', 'sent'), ('whatsapp_opt_out', '=', True), ('has_whatsapp_phone', '=', False)]"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

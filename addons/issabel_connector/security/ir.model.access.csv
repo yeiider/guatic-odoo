@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_issabel_config,access_issabel_config,model_issabel_config,base.group_user,1,1,1,1
+access_issabel_config_system,access_issabel_config_system,model_issabel_config,base.group_system,1,1,1,1
+access_issabel_event_processor_user,issabel.event.processor.user,model_issabel_event_processor,base.group_user,1,1,1,1
+access_issabel_event_processor_system,issabel.event.processor.system,model_issabel_event_processor,base.group_system,1,1,1,1

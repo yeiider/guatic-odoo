@@ -1,0 +1,89 @@
+.o-mail-ChatHistoryPanel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    height: 100vh;
+    background: white;
+    border-left: 1px solid #dee2e6;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1050;
+
+    .o-mail-ChatHistoryPanel-header {
+        min-height: 60px;
+    }
+
+    .o-mail-ChatHistoryPanel-messages {
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    }
+}
+
+.o-mail-HistoryMessage {
+    &.o-mail-HistoryMessage--system {
+        .o-mail-HistoryMessage-systemContent {
+            padding: 8px 12px;
+            background-color: #f8f9fa;
+            border-left: 3px solid #007bff;
+            border-radius: 4px;
+        }
+    }
+
+    .o-mail-HistoryMessage-avatarPlaceholder {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .o-mail-HistoryMessage-authorName {
+        font-size: 0.9rem;
+    }
+
+    .o-mail-HistoryMessage-timestamp {
+        font-size: 0.75rem;
+    }
+
+    .o-mail-HistoryMessage-textContent {
+        word-wrap: break-word;
+        white-space: pre-wrap;
+    }
+
+    .o-mail-HistoryMessage-imageAttachment {
+        img {
+            transition: transform 0.2s ease;
+            
+            &:hover {
+                transform: scale(1.02);
+            }
+        }
+    }
+
+    .o-mail-HistoryMessage-fileAttachment {
+        transition: box-shadow 0.2s ease;
+        cursor: pointer;
+        
+        &:hover {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .o-mail-ChatHistoryPanel {
+        width: 100vw;
+        left: 0;
+    }
+}

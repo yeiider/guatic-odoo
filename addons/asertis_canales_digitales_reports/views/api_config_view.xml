@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <!-- Vista formulario para configuración API -->
+        <record id="api_config_form_view" model="ir.ui.view">
+            <field name="name">api.config.form</field>
+            <field name="model">api.config</field>
+            <field name="arch" type="xml">
+                <form string="Configuración ">
+                    <header>
+                        <button name="authenticate" type="object" string="Autenticar"
+                            class="oe_highlight" />
+                        <button name="test_connection" type="object" string="Probar Conexión"
+                            class="btn-secondary" />
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Nombre de la configuración..." />
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="api_url" />
+                                <field name="auth_url" />
+                                <field name="is_active" />
+                            </group>
+                            <group>
+                                <field name="username" />
+                                <field name="password" password="True" />
+                                <field name="last_sync" readonly="1" />
+                            </group>
+                        </group>
+                        <group string="Token Information" invisible="not token">
+                            <field name="token" readonly="1" />
+                            <field name="token_expiry" readonly="1" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista lista para configuración API -->
+        <record id="api_config_tree_view" model="ir.ui.view">
+            <field name="name">api.config.tree</field>
+            <field name="model">api.config</field>
+            <field name="type">list</field>
+            <field name="arch" type="xml">
+                <list string="Configuraciones API">
+                    <field name="name" />
+                    <field name="api_url" />
+                    <field name="username" />
+                    <field name="is_active" />
+                    <field name="last_sync" />
+                    <field name="token_expiry" />
+                </list>
+            </field>
+        </record>
+
+        <!-- Vista búsqueda para configuración API -->
+        <record id="api_config_search_view" model="ir.ui.view">
+            <field name="name">api.config.search</field>
+            <field name="model">api.config</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Configuraciones">
+                    <field name="name" />
+                    <field name="api_url" />
+                    <field name="username" />
+                    <filter string="Activos" name="active" domain="[('is_active','=',True)]" />
+                    <filter string="Inactivos" name="inactive" domain="[('is_active','=',False)]" />
+                    <group expand="0" string="Agrupar por">
+                        <filter string="Estado" name="group_active" domain="[]"
+                            context="{'group_by':'is_active'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción para configuración API -->
+        <record id="api_config_action" model="ir.actions.act_window">
+            <field name="name">Configuración API</field>
+            <field name="res_model">api.config</field>
+            <field name="view_mode">list,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    ¡Configura tu primera conexión API!
+                </p>
+                <p>
+                    Aquí puedes configurar las credenciales para conectarte a APIs externas
+                    y obtener datos de reportería de manera segura.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

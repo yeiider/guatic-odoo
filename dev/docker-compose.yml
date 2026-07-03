@@ -1,0 +1,63 @@
+name: comercial-asertis
+services:
+  comercial-asertis-db:
+    image: postgres:16
+    container_name: comercial-asertis-db
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-comercial-asertis}
+      POSTGRES_USER: ${POSTGRES_USER:-odoo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-odoo123}
+    ports:
+      - "5432:5432"
+    volumes:
+      - comercial-asertis-pg-data:/var/lib/postgresql/data
+    networks:
+      - comercial-asertis-net
+
+  comercial-asertis-odoo:
+    container_name: comercial-asertis-odoo
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - ODOO_VERSION=${ODOO_VERSION:-18}
+    image: comercial-asertis-odoo:${IMAGE_TAG:-lastest}
+    restart: unless-stopped
+    depends_on:
+      - comercial-asertis-db
+    env_file: .env
+    environment:
+      HOST: ${HOST:-db}
+      USER: ${USER:-odoo}
+      PASSWORD: ${PASSWORD:-odoo123}
+    ports:
+      - "${ODOO_PORT:-8069}:8069"
+      - "8072:8072"
+    volumes:
+      - comercial-asertis-odoo-data:/var/lib/odoo
+      - ../odoo.conf:/etc/odoo/odoo.conf
+      - ../addons:/mnt/extra-addons
+    networks:
+      - comercial-asertis-net
+  comercial-asertis-nginx:
+    image: nginx:latest
+    container_name: comercial-asertis-nginx
+    restart: unless-stopped
+    depends_on:
+      - comercial-asertis-odoo
+    ports:
+      - "80:80"
+    volumes:
+      - ../nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - comercial-asertis-net
+
+volumes:
+  comercial-asertis-pg-data:
+  comercial-asertis-odoo-data:
+
+networks:
+  comercial-asertis-net:
+    driver: bridge

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_asertis_whatsapp_templates_root"
+            name="WhatsApp Asertis Templates"
+            sequence="205"
+            web_icon="asertis_whatsapp_templates,static/description/icon.png"
+        />
+        <!-- Configuración -->
+        <menuitem id="menu_whatsapp_asertis_config_item"
+            name="⚙️ Configuración"
+            parent="menu_asertis_whatsapp_templates_root"
+            action="action_whatsapp_asertis_config"
+            sequence="1" />
+        <!-- Plantillas -->
+        <menuitem id="menu_whatsapp_asertis_templates_item"
+            name="📄 Plantillas"
+            parent="menu_asertis_whatsapp_templates_root"
+            action="action_whatsapp_asertis_templates"
+            sequence="2" />
+        <!-- Registro de mensajes -->
+        <menuitem id="menu_whatsapp_asertis_message_log_item"
+            name="📝 Registro de mensajes"
+            parent="menu_asertis_whatsapp_templates_root"
+            action="action_whatsapp_asertis_message_log"
+            sequence="3" />
+    </data>
+</odoo>

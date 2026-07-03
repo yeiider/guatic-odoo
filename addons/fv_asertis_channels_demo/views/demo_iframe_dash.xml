@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+                      
+
+        <record id="action_demo_iframe_dash" model="ir.actions.client">
+            <field name="name">Indicadores Clave</field>
+            <field name="tag">iframe.dashboard</field>
+            <field name="params">{'dashboard': 'DashBoardGerencial'}</field>
+        </record> 
+
+        <record id="action_demo_speach_dash" model="ir.actions.client">
+            <field name="name">Indicadores Clave</field>
+            <field name="tag">iframe.dashboard</field>
+            <field name="params">{'dashboard': 'audio'}</field>
+        </record> 
+
+        <menuitem name="Indicadores Clave" id="menu_pricipal_demo_iframe_dash" sequence="10" web_icon="fv_asertis_channels_demo,static/src/img/icon.png" />
+
+        <!-- <menuitem name="Sales Dashboard" id="menu_owl_sales_dashboard" sequence="10" action="action_owl_sales_dashboard"/> -->
+        <menuitem name="Indicadores Clave " id="menu_demo_iframe_dash" sequence="10" action="action_demo_iframe_dash" parent="menu_pricipal_demo_iframe_dash"/>
+
+        <!-- <menuitem name="Sales Dashboard" id="menu_owl_sales_dashboard" sequence="10" action="action_owl_sales_dashboard"/> -->
+       <!-- <menuitem name="Demo Audio Speach" id="menu_demo_speach_dash" sequence="11" action="action_demo_speach_dash" parent="menu_pricipal_demo_iframe_dash"/> --> 
+
+
+    </data>
+</odoo>

@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vista de lista de plantillas -->
+        <record id="view_whatsapp_template_list" model="ir.ui.view">
+            <field name="name">whatsapp.template.list</field>
+            <field name="model">whatsapp.asertis.template</field>
+            <field name="arch" type="xml">
+                <list string="Plantillas WhatsApp" decoration-muted="not active">
+                    <field name="name" />
+                    <field name="template_name" />
+                    <field name="model_id" />
+                    <field name="template_type" />
+                    <field name="param_count" string="Parámetros" />
+                    <field name="usage_count" string="Usos" />
+                    <field name="last_used_date" />
+                    <field name="active" widget="boolean_toggle" />
+                    <field name="company_id" groups="base.group_multi_company" />
+                </list>
+            </field>
+        </record>
+
+        <!-- Vista kanban de plantillas -->
+        <record id="view_whatsapp_template_kanban" model="ir.ui.view">
+            <field name="name">whatsapp.template.kanban</field>
+            <field name="model">whatsapp.asertis.template</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="template_type" class="o_kanban_small_column">
+                    <field name="name" />
+                    <field name="template_name" />
+                    <field name="template_type" />
+                    <field name="model_id" />
+                    <field name="model" invisible="1" />
+                    <field name="param_count" />
+                    <field name="usage_count" />
+                    <field name="active" />
+                    <field name="company_id" />
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_card oe_kanban_global_click">
+                                <div class="o_kanban_card_header">
+                                    <div class="o_kanban_card_header_title">
+                                        <div class="o_primary">
+                                            <field name="name" />
+                                        </div>
+                                        <div class="o_secondary">
+                                            <field name="template_name" />
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_manage_button_section">
+                                        <a class="o_kanban_manage_toggle_button" href="#">
+                                            <i class="fa fa-ellipsis-v" role="img"
+                                                aria-label="Manage" title="Manage" />
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_card_content">
+                                    <div class="o_kanban_card_bottom">
+                                        <div class="oe_kanban_bottom_left">
+                                            <div> 📋 <field name="model_id" />
+                                            </div>
+                                            <div> 📊 <field name="param_count" /> parámetros </div>
+                                            <div t-if="record.usage_count.value > 0"> 📤 <field
+                                                    name="usage_count" /> usos </div>
+                                        </div>
+                                        <div class="oe_kanban_bottom_right">
+                                            <field name="active" widget="boolean_toggle" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_manage_view">
+                                    <div class="o_kanban_card_manage_section">
+                                        <div>
+                                            <a type="object" name="action_test_template">🧪 Probar</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Vista de formulario de plantillas -->
+        <record id="view_whatsapp_template_form" model="ir.ui.view">
+            <field name="name">whatsapp.template.form</field>
+            <field name="model">whatsapp.asertis.template</field>
+            <field name="arch" type="xml">
+                <form string="Plantilla WhatsApp">
+                    <header>
+                        <button name="action_test_template" string="🧪 Probar Plantilla"
+                            type="object" class="btn-primary" />
+                        <button name="action_duplicate_template" string="📋 Duplicar" type="object"
+                            class="btn-secondary" />
+
+                        <field name="active" widget="boolean_button"
+                            options="{'terminology': {'string_true': 'Activa', 'hover_true': 'Desactivar', 'string_false': 'Inactiva', 'hover_false': 'Activar'}}" />
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only" />
+                            <h1>
+                                <field name="name" placeholder="Nombre de la plantilla..." />
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group name="template_info" string="Información de la Plantilla">
+                                <field name="template_name" />
+                                <field name="template_id_api" />
+                                <field name="template_type" />
+                                <field name="model_id" />
+                                <field name="phone_field" />
+                            </group>
+                            <group name="api_config" string="Configuración API">
+
+                                <field name="config_id" widget="many2one"
+                                    options="{'no_create': True}" />
+
+                                <field name="company_id" groups="base.group_multi_company" />
+                            </group>
+                        </group>
+
+                        <group name="description_group">
+                            <field name="description"
+                                placeholder="Descripción de la plantilla y su uso..." />
+                        </group>
+
+                        <notebook>
+                            <page string="Parámetros" name="parameters">
+                                <field name="param_ids" context="{'default_template_id': id}">
+                                    <list string="Parámetros" editable="bottom">
+                                        <field name="sequence" widget="handle" />
+                                        <field name="name" />
+                                        <field name="field_name"
+                                            widget="DynamicModelFieldSelectorChar"
+                                            options="{'model': 'model'}" />
+                                        <field name="format_type" />
+                                        <field name="default_value" />
+                                        <field name="is_required" widget="boolean_toggle" />
+                                        <field name="decimal_places" />
+                                        <field name="currency_symbol" />
+                                        <field name="date_format" />
+                                        <field name="datetime_format" />
+                                        <field name="boolean_true_text"
+                                            column_invisible="[('format_type', '!=', 'boolean')]" />
+                                        <field name="boolean_false_text"
+                                            column_invisible="[('format_type', '!=', 'boolean')]" />
+                                        <field name="template_id" widget="many2one"
+                                            options="{'no_create': True}" column_invisible="1" />
+                                        <field name="model" column_invisible="1" />
+                                        <field name="field_type" column_invisible="1" />
+                                        <field name="active" widget="boolean_toggle" />
+                                        <field name="notes" />
+                                        <button name="action_test_parameter" type="object"
+                                            icon="fa-play" title="Probar Parámetro" />
+                                    </list>
+                                    <form string="Parámetro">
+                                        <sheet>
+                                            <div class="oe_title">
+                                                <label for="name" class="oe_edit_only" />
+                                                <h1>
+                                                    <field name="sequence" class="oe_inline"
+                                                        style="width: 50px;" />
+                                                    <span> - </span>
+                                                    <field name="name" class="oe_inline" />
+                                                </h1>
+                                            </div>
+
+                                            <group>
+                                                <group name="source" string="Origen del Dato">
+
+                                                    <field name="field_name" />
+                                                    <field name="field_type" readonly="1" />
+                                                    <field name="field_string" readonly="1" />
+                                                </group>
+                                                <group name="config" string="Configuración">
+                                                    <field name="format_type" />
+                                                    <field name="is_required" />
+                                                    <field name="active" />
+                                                </group>
+                                            </group>
+
+                                            <group name="format_config"
+                                                string="Configuración de Formato">
+                                                <field name="default_value" />
+                                                <field name="decimal_places"
+                                                    attrs="{'invisible': [('format_type', 'not in', ['float', 'currency'])]}" />
+                                                <field name="currency_symbol"
+                                                    attrs="{'invisible': [('format_type', '!=', 'currency')]}" />
+                                                <field name="date_format"
+                                                    attrs="{'invisible': [('format_type', '!=', 'date')]}" />
+                                                <field name="datetime_format"
+                                                    attrs="{'invisible': [('format_type', '!=', 'datetime')]}" />
+                                                <field name="boolean_true_text"
+                                                    attrs="{'invisible': [('format_type', '!=', 'boolean')]}" />
+                                                <field name="boolean_false_text"
+                                                    attrs="{'invisible': [('format_type', '!=', 'boolean')]}" />
+                                            </group>
+
+                                            <group name="notes">
+                                                <field name="notes"
+                                                    placeholder="Notas sobre este parámetro..." />
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+
+                            <page string="Vista Previa" name="preview">
+                                <group>
+                                    <field name="preview_text" widget="text" readonly="1" />
+                                </group>
+                                <div class="oe_clear">
+                                    <button name="generate_preview" string="🔄 Generar Vista Previa"
+                                        type="object" class="btn-primary" />
+                                </div>
+                            </page>
+
+                            <page string="Historial de Uso" name="usage">
+                                <group>
+                                    <group name="stats" string="Estadísticas">
+                                        <field name="usage_count" readonly="1" />
+                                        <field name="last_used_date" readonly="1" />
+                                        <field name="param_count" readonly="1" />
+                                    </group>
+                                </group>
+                                <field name="message_log_ids" readonly="1">
+                                    <list string="Mensajes Enviados" create="false" edit="false">
+                                        <field name="sent_date" />
+                                        <field name="partner_id" />
+                                        <field name="phone" />
+                                        <field name="status" decoration-success="status == 'sent'"
+                                            decoration-danger="status == 'failed'" />
+                                        <field name="user_id" />
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter />
+
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista de búsqueda de plantillas -->
+        <record id="view_whatsapp_template_search" model="ir.ui.view">
+            <field name="name">whatsapp.template.search</field>
+            <field name="model">whatsapp.asertis.template</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Plantillas">
+                    <field name="name" string="Nombre" />
+                    <field name="template_name" string="Template Name" />
+                    <field name="model_id" string="Modelo" />
+                    <field name="template_type" string="Tipo" />
+
+                    <filter string="Activas" name="active" domain="[('active', '=', True)]" />
+                    <filter string="Inactivas" name="inactive" domain="[('active', '=', False)]" />
+
+                    <separator />
+                    <filter string="Con Parámetros" name="with_params"
+                        domain="[('param_count', '>', 0)]" />
+                    <filter string="Sin Parámetros" name="without_params"
+                        domain="[('param_count', '=', 0)]" />
+                    <filter string="Utilizadas" name="used" domain="[('usage_count', '>', 0)]" />
+                    <filter string="Sin Usar" name="unused" domain="[('usage_count', '=', 0)]" />
+
+                    <separator />
+                    <filter string="Mis Plantillas" name="my_templates"
+                        domain="[('create_uid', '=', uid)]" />
+
+                    <group expand="1" string="Agrupar Por">
+                        <filter string="Modelo" name="group_model"
+                            context="{'group_by': 'model_id'}" />
+                        <filter string="Tipo" name="group_type"
+                            context="{'group_by': 'template_type'}" />
+                        <filter string="Estado" name="group_active" context="{'group_by': 'active'}" />
+                        <filter string="Compañía" name="group_company"
+                            context="{'group_by': 'company_id'}" groups="base.group_multi_company" />
+                    </group>
+                </search>
+            </field>
+        </record>
+        <!-- Accion de Plantillas   -->
+        <record id="action_whatsapp_asertis_templates" model="ir.actions.act_window">
+            <field name="name">Plantillas WhatsApp</field>
+            <field name="res_model">whatsapp.asertis.template</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="search_view_id" ref="view_whatsapp_template_search" />
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crea y gestiona plantillas de mensajes para WhatsApp. Usa plantillas para enviar
+                    mensajes rápidos y consistentes.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

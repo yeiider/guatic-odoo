@@ -1,0 +1,59 @@
+<odoo>
+    <data>
+
+
+        <!-- Vista tipo árbol personalizada -->
+        <record id="view_partner_person_list" model="ir.ui.view">
+            <field name="name">res.partner.person.list</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <list string="Contactos (Personas)">
+                    <field name="name" />
+                    <field name="email" />
+                    <field name="mobile" />
+                    <field name="provider_skill_ids" widget="many2many_tags" />
+                </list>
+            </field>
+        </record>
+
+        <!-- Vista tipo formulario personalizada -->
+        <record id="view_partner_person_form" model="ir.ui.view">
+            <field name="name">res.partner.person.form</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <form string="Asignar Habilidades al Contacto">
+                    <sheet>
+                        <group>
+                            <field name="name" readonly="1" />
+                            <field name="email" />
+                            <field name="mobile" />
+                            <field name="provider_skill_ids" widget="many2many_tags"
+                                domain="[('active','=',True)]" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Acción para abrir vista de personas con habilidades -->
+        <record id="action_assign_skills_to_persons" model="ir.actions.act_window">
+            <field name="name">Asignar Habilidades</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('is_company', '=', False), ('is_provider_chat_user', 'in',
+                [False, None])]</field>
+            <field name="context">{'create': False}</field>
+
+            <field name="view_ids"
+                eval="[
+        (5, 0, 0),
+        (0, 0, {'view_mode': 'list' , 'view_id': ref('view_partner_person_list')}),
+        (0, 0, {'view_mode': 'form', 'view_id': ref('view_partner_person_form')})
+    ]" />
+
+        </record>
+
+
+    </data>
+
+</odoo>

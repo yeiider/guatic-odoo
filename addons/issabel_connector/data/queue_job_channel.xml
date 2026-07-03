@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Canal dedicado para eventos AMI -->
+        <record id="channel_ami_events" model="queue.job.channel">
+            <field name="name">ami_events</field>
+            <field name="parent_id" ref="queue_job.channel_root"/>
+            
+        </record>
+
+    </data>
+</odoo>

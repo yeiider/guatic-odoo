@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="asertis_crm.TimelineOne2many" owl="1">
+        <div class="timeline-container my-4">
+            <div class="timeline-line"></div>
+            <t t-foreach="activities" t-as="actividad" t-key="actividad.id">
+                <div class="timeline-event" t-on-click="() => showDetails(actividad)">
+                    <div class="timeline-circle"></div>
+                    <div class="timeline-content">
+                        <div>
+                            <t t-if="actividad.data.actividad == 'llamada'">
+                                <i class="fa fa-phone"></i> <b>Llamada</b>
+                            </t>
+                            <t t-if="actividad.data.actividad == 'reunion'">
+                                <i class="fa fa-calendar"></i> <b>Reunión</b>
+                            </t>
+                            <t t-if="actividad.data.actividad == 'email'">
+                                <i class="fa fa-envelope"></i> <b>Correo</b>
+                            </t>
+                            <t t-if="actividad.data.actividad == 'otro'">
+                                <i class="fa fa-user-circle-o"></i> <b>Otro</b>
+                            </t>
+                            <!-- <strong><t t-esc="actividad.data.actividad"/></strong> -->
+                        </div>
+                        <div><t t-esc="actividad.data.fecha"/></div>
+                        <div><t t-esc="actividad.data.create_uid[1]"/></div>
+                        <!-- <div><t t-esc="actividad.data.descripcion"/></div> -->
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>
