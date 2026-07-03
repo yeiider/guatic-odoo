@@ -1,7 +1,4 @@
 services:
-  # ============================================================================
-  # PostgreSQL 16 — Base de datos de Odoo
-  # ============================================================================
   db:
     image: postgres:16
     container_name: guatic-odoo-db
@@ -17,11 +14,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  
 
-  # ============================================================================
-  # Odoo 18 con módulos custom (omnichannel, CRM, helpdesk, VoIP, WhatsApp)
-  # ============================================================================
   odoo:
     build:
       context: ./prod
@@ -35,9 +28,7 @@ services:
       db:
         condition: service_healthy
     ports:
-      # Puerto HTTP — Coolify lo mapea al proxy reverso
       - "8069"
-      # WebSocket / longpolling
       - "8072"
     volumes:
       - odoo-data:/var/lib/odoo
@@ -47,9 +38,6 @@ services:
       HOST: db
       USER: ${POSTGRES_USER:-odoo}
       PASSWORD: ${POSTGRES_PASSWORD:-odoo}
-    networks:
-      - odoo-network
-    # Healthcheck simple — Odoo 18 responde en 8069
     healthcheck:
       test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8069/web/health')"]
       interval: 30s
