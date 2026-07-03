@@ -1,0 +1,67 @@
+services:
+  # ============================================================================
+  # PostgreSQL 16 — Base de datos de Odoo
+  # ============================================================================
+  db:
+    image: postgres:16
+    container_name: guatic-odoo-db
+    restart: unless-stopped
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-guatic_odoo}
+      POSTGRES_USER: ${POSTGRES_USER:-odoo}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-odoo}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U odoo -d ${POSTGRES_DB:-guatic_odoo}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - odoo-network
+
+  # ============================================================================
+  # Odoo 18 con módulos custom (omnichannel, CRM, helpdesk, VoIP, WhatsApp)
+  # ============================================================================
+  odoo:
+    build:
+      context: ./prod
+      dockerfile: Dockerfile
+      args:
+        ODOO_VERSION: "18"
+    image: guatic-odoo:latest
+    container_name: guatic-odoo
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      # Puerto HTTP — Coolify lo mapea al proxy reverso
+      - "8069"
+      # WebSocket / longpolling
+      - "8072"
+    volumes:
+      - odoo-data:/var/lib/odoo
+      - ./odoo.prod.conf:/etc/odoo/odoo.conf:ro
+      - ./addons:/mnt/extra-addons
+    environment:
+      HOST: db
+      USER: ${POSTGRES_USER:-odoo}
+      PASSWORD: ${POSTGRES_PASSWORD:-odoo}
+    networks:
+      - odoo-network
+    # Healthcheck simple — Odoo 18 responde en 8069
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8069/web/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 6
+      start_period: 60s
+
+volumes:
+  odoo-db-data:
+  odoo-data:
+
+networks:
+  odoo-network:
+    driver: bridge
