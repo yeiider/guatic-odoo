@@ -30,12 +30,10 @@ if [ -n "$DB_PASSWORD" ]; then
     WAIT_ARGS+=("--db_password=$DB_PASSWORD")
 fi
 
-# Construir argumentos para Odoo (incluye --database si existe)
+# Construir argumentos para Odoo
+# NOTA: NO pasamos --database para que Odoo muestre el gestor de creación
+# de BD cuando list_db=True. La BD se asigna desde la URL o se crea en la UI.
 ODOO_ARGS=("${WAIT_ARGS[@]}")
-
-if [ -n "$DB_NAME" ]; then
-    ODOO_ARGS+=("--database=$DB_NAME")
-fi
 
 # Esperar a que PostgreSQL esté disponible
 if command -v wait-for-psql.py &> /dev/null; then
